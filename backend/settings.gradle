@@ -1,0 +1,4 @@
+rootProject.name = 'SmartCampus'
+include 'market-api'
+include 'market-batch'
+include 'market-chat'
