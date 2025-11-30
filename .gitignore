@@ -23,5 +23,5 @@ TestResults.xml
 backend/.idea/
 backend/.gradle/
 *.yml
-build.gradle.kts
+backend/build.gradle.kts
 *.projects
