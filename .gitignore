@@ -22,3 +22,6 @@ rad.json
 TestResults.xml
 backend/.idea/
 backend/.gradle/
+*.yml
+build.gradle.kts
+*.projects
