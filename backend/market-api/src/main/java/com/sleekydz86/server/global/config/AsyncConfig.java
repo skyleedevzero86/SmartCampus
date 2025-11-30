@@ -1,4 +1,4 @@
-package com.sleekydz86.community.global.config;
+package com.sleekydz86.server.global.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.AsyncConfigurer;

@@ -1,4 +1,4 @@
-package com.sleekydz86.community.global.domain;
+package com.sleekydz86.server.global.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

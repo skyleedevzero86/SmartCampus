@@ -1,4 +1,4 @@
-package com.sleekydz86.community.global.config.filter;
+package com.sleekydz86.server.global.config.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

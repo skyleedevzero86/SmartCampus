@@ -1,7 +1,7 @@
-package com.sleekydz86.community.global.config;
+package com.sleekydz86.server.global.config;
 
 
-import com.sleekydz86.community.global.event.Events;
+import com.sleekydz86.server.global.event.Events;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;

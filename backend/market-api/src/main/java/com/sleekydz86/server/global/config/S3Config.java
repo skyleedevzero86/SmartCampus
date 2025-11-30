@@ -1,4 +1,4 @@
-package com.sleekydz86.community.global.config;
+package com.sleekydz86.server.global.config;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;

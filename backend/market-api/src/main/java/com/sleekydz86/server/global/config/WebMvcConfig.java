@@ -1,6 +1,6 @@
-package com.sleekydz86.community.global.config;
+package com.sleekydz86.server.global.config;
 
-import com.sleekydz86.community.global.config.filter.CorsCustomFilter;
+import com.sleekydz86.server.global.config.filter.CorsCustomFilter;
 import jakarta.servlet.Filter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;

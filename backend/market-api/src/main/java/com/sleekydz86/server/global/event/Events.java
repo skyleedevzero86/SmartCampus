@@ -1,4 +1,4 @@
-package com.sleekydz86.community.global.event;
+package com.sleekydz86.server.global.event;
 
 import org.springframework.context.ApplicationEventPublisher;
 
