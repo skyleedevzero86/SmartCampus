@@ -1,4 +1,4 @@
-package com.sleekydz86.server.member.member.dto;
+package com.sleekydz86.server.member.domain.member.dto;
 
 import java.time.LocalDateTime;
 

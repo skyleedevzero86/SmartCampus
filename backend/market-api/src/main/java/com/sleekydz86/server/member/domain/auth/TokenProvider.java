@@ -1,4 +1,4 @@
-package com.sleekydz86.server.member.auth;
+package com.sleekydz86.server.member.domain.auth;
 
 public interface TokenProvider {
 

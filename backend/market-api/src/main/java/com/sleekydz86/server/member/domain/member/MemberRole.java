@@ -1,4 +1,4 @@
-package com.sleekydz86.server.member.member;
+package com.sleekydz86.server.member.domain.member;
 
 import lombok.Getter;
 

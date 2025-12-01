@@ -1,4 +1,4 @@
-package com.sleekydz86.server.member.auth.event;
+package com.sleekydz86.server.member.domain.auth.event;
 
 import com.sleekydz86.server.global.event.Event;
 import lombok.Getter;

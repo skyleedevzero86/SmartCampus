@@ -1,7 +1,7 @@
-package com.sleekydz86.server.member.member;
+package com.sleekydz86.server.member.domain.member;
 
 
-import com.sleekydz86.server.member.member.dto.TradeHistoryResponse;
+import com.sleekydz86.server.member.domain.member.dto.TradeHistoryResponse;
 
 import java.util.List;
 

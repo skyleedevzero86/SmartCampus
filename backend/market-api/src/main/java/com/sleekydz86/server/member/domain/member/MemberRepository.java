@@ -1,6 +1,6 @@
-package com.sleekydz86.server.member.member;
+package com.sleekydz86.server.member.domain.member;
 
-import com.sleekydz86.server.member.member.dto.ProductByMemberResponse;
+import com.sleekydz86.server.member.domain.member.dto.ProductByMemberResponse;
 
 import java.util.List;
 import java.util.Optional;
