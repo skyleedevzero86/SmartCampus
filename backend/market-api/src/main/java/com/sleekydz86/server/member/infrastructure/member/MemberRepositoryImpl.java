@@ -3,6 +3,7 @@ package com.sleekydz86.server.member.infrastructure.member;
 import com.sleekydz86.server.member.domain.member.Member;
 import com.sleekydz86.server.member.domain.member.MemberRepository;
 import com.sleekydz86.server.member.domain.member.dto.ProductByMemberResponse;
+import com.sleekydz86.server.member.infrastructure.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
