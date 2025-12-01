@@ -26,3 +26,4 @@ backend/.gradle/
 backend/build.gradle.kts
 *.projects
 backend/build/
+.gradle/
