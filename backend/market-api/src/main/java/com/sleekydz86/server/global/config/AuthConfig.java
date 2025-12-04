@@ -1,9 +1,9 @@
 package com.sleekydz86.server.global.config;
 
-import com.sleekydz86.server.member.ui.auth.interceptor.LoginValidCheckerInterceptor;
-import com.sleekydz86.server.member.ui.auth.interceptor.ParseMemberIdFromTokenInterceptor;
-import com.sleekydz86.server.member.ui.auth.interceptor.PathMatcherInterceptor;
-import com.sleekydz86.server.member.ui.auth.support.resolver.AuthArgumentResolver;
+import com.sleekydz86.server.market.member.ui.auth.interceptor.LoginValidCheckerInterceptor;
+import com.sleekydz86.server.market.member.ui.auth.interceptor.ParseMemberIdFromTokenInterceptor;
+import com.sleekydz86.server.market.member.ui.auth.interceptor.PathMatcherInterceptor;
+import com.sleekydz86.server.market.member.ui.auth.support.resolver.AuthArgumentResolver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -13,12 +13,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
 
-import static com.sleekydz86.server.member.ui.auth.interceptor.HttpMethod.ANY;
-import static com.sleekydz86.server.member.ui.auth.interceptor.HttpMethod.DELETE;
-import static com.sleekydz86.server.member.ui.auth.interceptor.HttpMethod.GET;
-import static com.sleekydz86.server.member.ui.auth.interceptor.HttpMethod.OPTIONS;
-import static com.sleekydz86.server.member.ui.auth.interceptor.HttpMethod.PATCH;
-import static com.sleekydz86.server.member.ui.auth.interceptor.HttpMethod.POST;
+import static com.sleekydz86.server.market.member.ui.auth.interceptor.HttpMethod.ANY;
+import static com.sleekydz86.server.market.member.ui.auth.interceptor.HttpMethod.DELETE;
+import static com.sleekydz86.server.market.member.ui.auth.interceptor.HttpMethod.GET;
+import static com.sleekydz86.server.market.member.ui.auth.interceptor.HttpMethod.OPTIONS;
+import static com.sleekydz86.server.market.member.ui.auth.interceptor.HttpMethod.PATCH;
+import static com.sleekydz86.server.market.member.ui.auth.interceptor.HttpMethod.POST;
 
 @RequiredArgsConstructor
 @Configuration
