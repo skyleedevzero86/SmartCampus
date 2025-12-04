@@ -1,0 +1,43 @@
+package com.sleekydz86.server.market.product.domain.dto;
+
+
+import com.sleekydz86.server.market.product.domain.vo.Location;
+import com.sleekydz86.server.market.product.domain.vo.ProductStatus;
+
+import java.time.LocalDateTime;
+
+public record ProductPagingSimpleResponse(
+        Long id,
+        Long thumbnailId,
+        String thumbnailUrl,
+        String location,
+        String title,
+        Integer price,
+        Integer visitedCount,
+        Integer contactCount,
+        ProductStatus productStatus,
+        Long ownerId,
+        String ownerName,
+        Integer productLikesCount,
+        Boolean isAlreadyLikedByMe,
+        LocalDateTime createDate
+) {
+    public ProductPagingSimpleResponse(
+            final Long id,
+            final Long thumbnailId,
+            final String thumbnailUrl,
+            final Location location,
+            final String title,
+            final Integer price,
+            final Integer visitedCount,
+            final Integer contactCount,
+            final ProductStatus productStatus,
+            final Long ownerId,
+            final String ownerName,
+            final Integer productLikesCount,
+            final Boolean isAlreadyLikedByMe,
+            final LocalDateTime createDate
+    ) {
+        this(id, thumbnailId, thumbnailUrl, location.getContent(), title, price, visitedCount, contactCount, productStatus, ownerId, ownerName, productLikesCount, isAlreadyLikedByMe, createDate);
+    }
+}
