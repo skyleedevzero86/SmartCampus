@@ -5,8 +5,8 @@ import com.sleekydz86.server.market.product.domain.ProductLike;
 import com.sleekydz86.server.market.product.domain.dto.ProductImageResponse;
 import com.sleekydz86.server.market.product.domain.dto.ProductPagingSimpleResponse;
 import com.sleekydz86.server.market.product.domain.dto.ProductSpecificResponse;
-import com.sleekydz86.server.market.product.mapper.ProductLikeMapper;
-import com.sleekydz86.server.market.product.mapper.ProductMapper;
+import com.sleekydz86.server.market.product.infrastructure.mapper.ProductLikeMapper;
+import com.sleekydz86.server.market.product.infrastructure.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

@@ -1,4 +1,4 @@
-package com.sleekydz86.server.market.board.mapper;
+package com.sleekydz86.server.market.board.infrastructure.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
