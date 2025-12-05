@@ -1,4 +1,4 @@
-package com.sleekydz86.server.market.product.mapper;
+package com.sleekydz86.server.market.product.infrastructure.mapper;
 
 import com.sleekydz86.server.market.product.domain.Product;
 import org.apache.ibatis.annotations.Mapper;

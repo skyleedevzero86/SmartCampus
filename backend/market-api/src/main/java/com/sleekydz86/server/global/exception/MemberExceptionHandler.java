@@ -1,6 +1,10 @@
 package com.sleekydz86.server.global.exception;
 
 import com.sleekydz86.server.global.exception.exceptions.auth.*;
+import com.sleekydz86.server.global.exception.exceptions.member.MemberAlreadyExistedException;
+import com.sleekydz86.server.global.exception.exceptions.member.MemberAuthInvalidException;
+import com.sleekydz86.server.global.exception.exceptions.member.MemberNotFoundException;
+import com.sleekydz86.server.global.exception.exceptions.member.PasswordNotMatchedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
