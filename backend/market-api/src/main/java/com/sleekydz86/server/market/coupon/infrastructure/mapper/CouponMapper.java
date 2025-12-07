@@ -1,4 +1,4 @@
-package com.sleekydz86.server.market.voucher.infrastructure.mapper;
+package com.sleekydz86.server.market.coupon.infrastructure.mapper;
 
 import com.sleekydz86.server.market.coupon.domain.Coupon;
 import org.apache.ibatis.annotations.Mapper;

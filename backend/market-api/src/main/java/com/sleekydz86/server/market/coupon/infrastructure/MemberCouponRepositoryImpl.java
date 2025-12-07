@@ -1,8 +1,8 @@
-package com.sleekydz86.server.market.voucher.infrastructure;
+package com.sleekydz86.server.market.coupon.infrastructure;
 
 import com.sleekydz86.server.market.coupon.domain.MemberCoupon;
 import com.sleekydz86.server.market.coupon.domain.MemberCouponRepository;
-import com.sleekydz86.server.market.voucher.infrastructure.mapper.MemberCouponMapper;
+import com.sleekydz86.server.market.coupon.infrastructure.mapper.MemberCouponMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
