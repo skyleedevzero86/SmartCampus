@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.server.market.infrastructure.product.mapper.ProductLikeMapper">
+
+    <resultMap id="ProductLikeResultMap" type="com.server.market.domain.product.ProductLike">
+        <id property="id" column="id"/>
+        <result property="memberId" column="member_id"/>
+        <result property="productId" column="product_id"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO product_like (member_id, product_id, created_at, updated_at)
+        VALUES (#{memberId}, #{productId}, NOW(), NOW())
+    </insert>
+
+    <select id="existsByProductIdAndMemberId" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM product_like
+        WHERE product_id = #{productId} AND member_id = #{memberId}
+    </select>
+
+    <delete id="deleteByProductIdAndMemberId">
+        DELETE FROM product_like
+        WHERE product_id = #{productId} AND member_id = #{memberId}
+    </delete>
+
+</mapper>
+
+
+
+

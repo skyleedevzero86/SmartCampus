@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.server.community.infrastructure.board.mapper.BoardMapper">
+
+    <resultMap id="BoardResultMap" type="com.server.community.domain.board.Board">
+        <id property="id" column="id"/>
+        <result property="writerId" column="writer_id"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <association property="post" javaType="com.server.community.domain.board.vo.Post">
+            <result property="title" column="title"/>
+            <result property="content" column="content"/>
+        </association>
+        <association property="likeCount" javaType="com.server.community.domain.board.vo.LikeCount">
+            <result property="value" column="like_count"/>
+        </association>
+    </resultMap>
+
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO board (title, content, writer_id, like_count, created_at, updated_at)
+        VALUES (#{post.title}, #{post.content}, #{writerId}, #{likeCount.value}, NOW(), NOW())
+    </insert>
+
+    <select id="findById" resultMap="BoardResultMap">
+        SELECT id, title, content, writer_id, like_count, created_at, updated_at
+        FROM board
+        WHERE id = #{id}
+    </select>
+
+    <select id="findByIdUsingPessimistic" resultMap="BoardResultMap">
+        SELECT id, title, content, writer_id, like_count, created_at, updated_at
+        FROM board
+        WHERE id = #{id}
+            FOR UPDATE
+    </select>
+
+    <select id="findBoardWithImages" resultMap="BoardResultMap">
+        SELECT b.id, b.title, b.content, b.writer_id, b.like_count, b.created_at, b.updated_at
+        FROM board b
+        WHERE b.id = #{boardId}
+    </select>
+
+    <delete id="deleteById">
+        DELETE FROM board WHERE id = #{id}
+    </delete>
+
+</mapper>
+
+
+
+

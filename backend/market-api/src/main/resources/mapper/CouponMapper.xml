@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.server.coupon.infrastructure.coupon.mapper.CouponMapper">
+
+    <resultMap id="CouponResultMap" type="com.server.coupon.domain.coupon.Coupon">
+        <id property="id" column="id"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <association property="description" javaType="com.server.coupon.domain.coupon.Description">
+            <result property="name" column="name"/>
+            <result property="content" column="content"/>
+        </association>
+        <association property="policy" javaType="com.server.coupon.domain.coupon.Policy">
+            <result property="canUseAlone" column="can_use_alone"/>
+            <result property="isDiscountPercentage" column="is_discount_percentage"/>
+            <result property="amount" column="amount"/>
+        </association>
+    </resultMap>
+
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO coupon (name, content, can_use_alone, is_discount_percentage, amount, created_at, updated_at)
+        VALUES (#{description.name}, #{description.content}, #{policy.canUseAlone}, #{policy.isDiscountPercentage}, #{policy.amount}, NOW(), NOW())
+    </insert>
+
+    <select id="findById" resultMap="CouponResultMap">
+        SELECT id, name, content, can_use_alone, is_discount_percentage, amount, created_at, updated_at
+        FROM coupon
+        WHERE id = #{id}
+    </select>
+
+    <delete id="deleteById">
+        DELETE FROM coupon WHERE id = #{id}
+    </delete>
+
+    <select id="findAllByIdIn" resultMap="CouponResultMap">
+        SELECT id, name, content, can_use_alone, is_discount_percentage, amount, created_at, updated_at
+        FROM coupon
+        WHERE id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="countAllByIdIn" resultType="int">
+        SELECT COUNT(*)
+        FROM coupon
+        WHERE id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+</mapper>
+
+
+
+

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.server.member.infrastructure.member.mapper.TradeHistoryMapper">
+
+    <resultMap id="TradeHistoryResultMap" type="com.server.member.domain.member.TradeHistory">
+        <id property="id" column="id"/>
+        <result property="buyerId" column="buyer_id"/>
+        <result property="sellerId" column="seller_id"/>
+        <result property="productId" column="product_id"/>
+        <result property="productOriginPrice" column="product_origin_price"/>
+        <result property="productDiscountPrice" column="product_discount_price"/>
+        <result property="usingCouponIds" column="using_coupon_ids"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO trade_history (buyer_id, seller_id, product_id, product_origin_price, product_discount_price, using_coupon_ids, created_at, updated_at)
+        VALUES (#{buyerId}, #{sellerId}, #{productId}, #{productOriginPrice}, #{productDiscountPrice}, #{usingCouponIds}, NOW(), NOW())
+    </insert>
+
+    <select id="findAllByBuyerId" resultMap="TradeHistoryResultMap">
+        SELECT id, buyer_id, seller_id, product_id, product_origin_price, product_discount_price, using_coupon_ids, created_at, updated_at
+        FROM trade_history
+        WHERE buyer_id = #{buyerId}
+    </select>
+
+    <select id="findAllBySellerId" resultMap="TradeHistoryResultMap">
+        SELECT id, buyer_id, seller_id, product_id, product_origin_price, product_discount_price, using_coupon_ids, created_at, updated_at
+        FROM trade_history
+        WHERE seller_id = #{sellerId}
+    </select>
+
+</mapper>
+
+
+
+
