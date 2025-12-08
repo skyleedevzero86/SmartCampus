@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.server.coupon.infrastructure.voucher.mapper.VoucherMapper">
+
+    <resultMap id="VoucherResultMap" type="com.server.coupon.domain.voucher.Voucher">
+        <id property="id" column="id"/>
+        <result property="couponId" column="coupon_id"/>
+        <result property="description" column="description"/>
+        <result property="voucherNumber" column="voucher_number"/>
+        <result property="isPublic" column="is_public"/>
+        <result property="isUsed" column="is_used"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO voucher (coupon_id, description, voucher_number, is_public, is_used, created_at, updated_at)
+        VALUES (#{couponId}, #{description}, #{voucherNumber}, #{isPublic}, #{isUsed}, NOW(), NOW())
+    </insert>
+
+    <select id="findById" resultMap="VoucherResultMap">
+        SELECT id, coupon_id, description, voucher_number, is_public, is_used, created_at, updated_at
+        FROM voucher
+        WHERE id = #{id}
+    </select>
+
+</mapper>
+
+
+
+

@@ -1,6 +1,6 @@
 package com.sleekydz86.server.market.product.infrastructure;
 
-mport com.querydsl.core.types.Projections;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;

@@ -1,5 +1,7 @@
 package com.sleekydz86.server.market.coupon.domain;
 
+import com.sleekydz86.server.global.exception.exceptions.coupon.ContainsNotExistedCouponException;
+import com.sleekydz86.server.global.exception.exceptions.coupon.UsingAloneCouponContainsException;
 import lombok.AllArgsConstructor;
 
 import java.util.Collections;

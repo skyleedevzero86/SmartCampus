@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.server.member.infrastructure.member.mapper.MemberMapper">
+
+    <resultMap id="MemberResultMap" type="com.server.member.domain.member.Member">
+        <id property="id" column="id"/>
+        <result property="email" column="email"/>
+        <result property="password" column="password"/>
+        <result property="nickname" column="nickname"/>
+        <result property="memberRole" column="member_role" typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO member (email, password, nickname, member_role, created_at, updated_at)
+        VALUES (#{email}, #{password}, #{nickname}, #{memberRole}, NOW(), NOW())
+    </insert>
+
+    <select id="findById" resultMap="MemberResultMap">
+        SELECT id, email, password, nickname, member_role, created_at, updated_at
+        FROM member
+        WHERE id = #{id}
+    </select>
+
+    <select id="findByEmail" resultMap="MemberResultMap">
+        SELECT id, email, password, nickname, member_role, created_at, updated_at
+        FROM member
+        WHERE email = #{email}
+    </select>
+
+    <select id="findByNickname" resultMap="MemberResultMap">
+        SELECT id, email, password, nickname, member_role, created_at, updated_at
+        FROM member
+        WHERE nickname = #{nickname}
+    </select>
+
+    <select id="existsByEmail" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM member
+        WHERE email = #{email}
+    </select>
+
+</mapper>
+
+
+
+

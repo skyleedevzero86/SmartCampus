@@ -1,5 +1,6 @@
 package com.sleekydz86.server.global.config;
 
+import com.sleekydz86.server.global.querycounter.QueryCounterInterceptor;
 import com.sleekydz86.server.market.member.ui.auth.interceptor.LoginValidCheckerInterceptor;
 import com.sleekydz86.server.market.member.ui.auth.interceptor.ParseMemberIdFromTokenInterceptor;
 import com.sleekydz86.server.market.member.ui.auth.interceptor.PathMatcherInterceptor;

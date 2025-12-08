@@ -1,17 +1,23 @@
 package com.sleekydz86.server.market.product.ui.dto;
 
+
 import com.sleekydz86.server.market.product.domain.Product;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-public record ProductsResponse(
-        List<ProductSimpleResponse> products
+public record ProductResponse(
+        Long productId,
+        Long ownerId,
+        String title,
+        String content,
+        Integer price
 ) {
 
-    public static ProductsResponse from(final List<Product> products) {
-        return products.stream()
-                .map(ProductSimpleResponse::from)
-                .collect(Collectors.collectingAndThen(Collectors.toList(), ProductsResponse::new));
+    public static ProductResponse from(final Product product) {
+        return new ProductResponse(
+                product.getId(),
+                product.getMemberId(),
+                product.getDescription().getTitle(),
+                product.getDescription().getContent(),
+                product.getPrice().getPrice()
+        );
     }
 }

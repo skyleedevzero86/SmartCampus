@@ -1,6 +1,7 @@
 package com.sleekydz86.server.market.coupon.domain;
 
 import com.sleekydz86.server.global.domain.BaseEntity;
+import com.sleekydz86.server.global.exception.exceptions.coupon.CouponAmountRangeInvalidException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
