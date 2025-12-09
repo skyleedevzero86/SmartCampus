@@ -13,10 +13,66 @@
         <result property="updatedAt" column="updated_at"/>
     </resultMap>
 
+    <resultMap id="VoucherSimpleResponseMap" type="com.sleekydz86.server.market.voucher.domain.dto.VoucherSimpleResponse">
+        <constructor>
+            <idArg column="id" javaType="java.lang.Long"/>
+            <arg column="coupon_id" javaType="java.lang.Long"/>
+            <arg column="description" javaType="java.lang.String"/>
+            <arg column="is_public" javaType="java.lang.Boolean"/>
+            <arg column="is_used" javaType="java.lang.Boolean"/>
+            <arg column="create_date" javaType="java.time.LocalDateTime"/>
+        </constructor>
+    </resultMap>
+
+    <resultMap id="VoucherSpecificResponseMap" type="com.sleekydz86.server.market.voucher.domain.dto.VoucherSpecificResponse">
+        <constructor>
+            <idArg column="voucher_id" javaType="java.lang.Long"/>
+            <arg column="coupon_id" javaType="java.lang.Long"/>
+            <arg column="coupon_name" javaType="java.lang.String"/>
+            <arg column="can_use_alone" javaType="java.lang.Boolean"/>
+            <arg column="is_discount_percentage" javaType="java.lang.Boolean"/>
+            <arg column="amount" javaType="java.lang.Integer"/>
+            <arg column="voucher_description" javaType="java.lang.String"/>
+            <arg column="voucher_number" javaType="java.lang.String"/>
+            <arg column="is_public_voucher" javaType="java.lang.Boolean"/>
+            <arg column="is_used_voucher" javaType="java.lang.Boolean"/>
+            <arg column="create_date" javaType="java.time.LocalDateTime"/>
+        </constructor>
+    </resultMap>
+
     <select id="findById" resultMap="VoucherResultMap">
         SELECT id, coupon_id, description, voucher_number, is_public, is_used, created_at, updated_at
         FROM voucher
         WHERE id = #{id}
+    </select>
+
+    <select id="findAllVouchers" resultMap="VoucherSimpleResponseMap">
+        SELECT id, coupon_id, description, is_public, is_used, created_at AS create_date
+        FROM voucher
+        ORDER BY id DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="countAllVouchers" resultType="long">
+        SELECT COUNT(*)
+        FROM voucher
+    </select>
+
+    <select id="findVoucherById" resultMap="VoucherSpecificResponseMap">
+        SELECT 
+            vvd.voucher_id,
+            vvd.coupon_id,
+            vvd.coupon_name,
+            vvd.can_use_alone,
+            vvd.is_discount_percentage,
+            vvd.amount,
+            vvd.voucher_description,
+            vvd.voucher_number,
+            vvd.is_public_voucher,
+            vvd.is_used_voucher,
+            vvd.create_date
+        FROM v_voucher_detail vvd
+        WHERE vvd.voucher_id = #{voucherId}
     </select>
 
     <select id="executeVoucherCUD" statementType="CALLABLE" parameterType="map">

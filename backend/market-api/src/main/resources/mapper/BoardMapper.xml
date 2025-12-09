@@ -16,6 +16,31 @@
         </association>
     </resultMap>
 
+    <resultMap id="BoardSimpleResponseMap" type="com.sleekydz86.server.market.board.application.dto.BoardSimpleResponse">
+        <constructor>
+            <idArg column="id" javaType="java.lang.Long"/>
+            <arg column="writer_nickname" javaType="java.lang.String"/>
+            <arg column="title" javaType="java.lang.String"/>
+            <arg column="created_date" javaType="java.time.LocalDateTime"/>
+            <arg column="like_count" javaType="java.lang.Long"/>
+            <arg column="comment_count" javaType="java.lang.Long"/>
+            <arg column="is_liked_already_by_me" javaType="java.lang.Boolean"/>
+        </constructor>
+    </resultMap>
+
+    <resultMap id="BoardFoundResponseMap" type="com.sleekydz86.server.market.board.application.dto.BoardFoundResponse">
+        <constructor>
+            <idArg column="id" javaType="java.lang.Long"/>
+            <arg column="writer_nickname" javaType="java.lang.String"/>
+            <arg column="title" javaType="java.lang.String"/>
+            <arg column="content" javaType="java.lang.String"/>
+            <arg column="like_count" javaType="java.lang.Long"/>
+            <arg column="is_my_post" javaType="java.lang.Boolean"/>
+            <arg column="is_liked_already_by_me" javaType="java.lang.Boolean"/>
+            <arg column="created_date" javaType="java.time.LocalDateTime"/>
+        </constructor>
+    </resultMap>
+
     <select id="findById" resultMap="BoardResultMap">
         SELECT id, title, content, writer_id, like_count, created_at, updated_at
         FROM board
@@ -33,6 +58,41 @@
         SELECT b.id, b.title, b.content, b.writer_id, b.like_count, b.created_at, b.updated_at
         FROM board b
         WHERE b.id = #{boardId}
+    </select>
+
+    <select id="findAllBoard" resultMap="BoardSimpleResponseMap">
+        SELECT 
+            vbd.id,
+            vbd.writer_nickname,
+            vbd.title,
+            vbd.created_at AS created_date,
+            vbd.like_count,
+            vbd.comment_count,
+            CASE WHEN ls.member_id = #{memberId} THEN TRUE ELSE FALSE END AS is_liked_already_by_me
+        FROM v_board_detail vbd
+        LEFT JOIN like_storage ls ON ls.board_id = vbd.id AND ls.member_id = #{memberId}
+        ORDER BY vbd.id DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="countAllBoard" resultType="long">
+        SELECT COUNT(*)
+        FROM board
+    </select>
+
+    <select id="findBoardById" resultMap="BoardFoundResponseMap">
+        SELECT 
+            vbd.id,
+            vbd.writer_nickname,
+            vbd.title,
+            vbd.content,
+            vbd.like_count,
+            CASE WHEN vbd.writer_id = #{memberId} THEN TRUE ELSE FALSE END AS is_my_post,
+            CASE WHEN ls.member_id = #{memberId} THEN TRUE ELSE FALSE END AS is_liked_already_by_me,
+            vbd.created_at AS created_date
+        FROM v_board_detail vbd
+        LEFT JOIN like_storage ls ON ls.board_id = vbd.id AND ls.member_id = #{memberId}
+        WHERE vbd.id = #{boardId}
     </select>
 
     <select id="executeBoardCUD" statementType="CALLABLE" parameterType="map">
