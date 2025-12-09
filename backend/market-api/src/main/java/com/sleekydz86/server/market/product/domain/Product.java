@@ -37,6 +37,7 @@ public class Product extends BaseEntity {
 
     private Long memberId;
 
+    @Builder.Default
     private List<ProductImage> productImages = new ArrayList<>();
 
 

@@ -18,7 +18,6 @@ public class CommentRepositoryImpl implements CommentRepository {
 
     private final CommentMapper commentMapper;
     private final CommentJdbcRepository commentJdbcRepository;
-    private final CommentQueryRepository commentQueryRepository;
 
     @Override
     public Comment save(final Comment comment) {
@@ -40,7 +39,7 @@ public class CommentRepositoryImpl implements CommentRepository {
     }
 
     public List<CommentSimpleResponse> findAllCommentsByBoardId(final Long boardId, final Long memberId, final Long commentId, final int pageSize) {
-        return commentQueryRepository.findAllWithPaging(boardId, memberId, commentId, pageSize);
+        throw new UnsupportedOperationException("findAllCommentsByBoardId needs to be implemented with MyBatis");
     }
 
     @Override
