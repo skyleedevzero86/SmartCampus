@@ -1,7 +1,7 @@
 package com.sleekydz86.alerm.global.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sleekydz86.alerm.global.listener.MailPublisherListener;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +14,10 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
+@RequiredArgsConstructor
 public class RedisConfig {
+
+    private final MailPublisherListener mailPublisherListener;
 
     @Value("${spring.data.redis.host:localhost}")
     private String redisHost;
@@ -46,12 +49,7 @@ public class RedisConfig {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(redisConnectionFactory());
 
-        container.addMessageListener(authMailListener(), authMailTopic());
+        container.addMessageListener(mailPublisherListener, authMailTopic());
         return container;
-    }
-
-    @Bean
-    public MailPublisherListener authMailListener() {
-        return new MailPublisherListener(new ObjectMapper());
     }
 }

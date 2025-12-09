@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> handleIllegalArgumentException(final IllegalArgumentException exception) {
-        log.error(exception.getMessage());
+        log.error("잘못된 인자 오류 발생: {}", exception.getMessage());
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(INTERNAL_SERVER_ERROR_MESSAGE);
