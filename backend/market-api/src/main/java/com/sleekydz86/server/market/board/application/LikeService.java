@@ -1,6 +1,7 @@
 package com.sleekydz86.server.market.board.application;
 
 import com.sleekydz86.server.global.event.Events;
+import com.sleekydz86.server.market.board.domain.LikeStorage;
 import com.sleekydz86.server.market.board.domain.LikeStorageRepository;
 import com.sleekydz86.server.market.board.domain.event.LikePushedEvent;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,8 @@
 package com.sleekydz86.server.market.member.domain.member;
 
 import com.sleekydz86.server.global.domain.BaseEntity;
+import com.sleekydz86.server.global.exception.exceptions.member.MemberAuthInvalidException;
+import com.sleekydz86.server.global.exception.exceptions.member.PasswordNotMatchedException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

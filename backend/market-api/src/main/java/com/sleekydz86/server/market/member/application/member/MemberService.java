@@ -1,5 +1,6 @@
 package com.sleekydz86.server.market.member.application.member;
 
+import com.sleekydz86.server.global.exception.exceptions.member.MemberNotFoundException;
 import com.sleekydz86.server.market.member.application.member.dto.TradeHistoryCreateRequest;
 import com.sleekydz86.server.market.member.domain.member.Member;
 import com.sleekydz86.server.market.member.domain.member.MemberRepository;

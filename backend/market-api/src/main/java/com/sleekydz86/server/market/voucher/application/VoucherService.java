@@ -1,6 +1,7 @@
 package com.sleekydz86.server.market.voucher.application;
 
 import com.sleekydz86.server.global.event.Events;
+import com.sleekydz86.server.global.exception.exceptions.coupon.VoucherNotFoundException;
 import com.sleekydz86.server.market.voucher.application.dto.VoucherCreateRequest;
 import com.sleekydz86.server.market.voucher.application.dto.VoucherNumberRequest;
 import com.sleekydz86.server.market.voucher.domain.Voucher;

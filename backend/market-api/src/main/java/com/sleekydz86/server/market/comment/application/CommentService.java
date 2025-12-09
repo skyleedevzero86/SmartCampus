@@ -1,5 +1,6 @@
 package com.sleekydz86.server.market.comment.application;
 
+import com.sleekydz86.server.global.exception.exceptions.CommentNotFoundException;
 import com.sleekydz86.server.market.comment.application.dto.CommentCreateRequest;
 import com.sleekydz86.server.market.comment.application.dto.CommentPatchRequest;
 import com.sleekydz86.server.market.comment.domain.Comment;

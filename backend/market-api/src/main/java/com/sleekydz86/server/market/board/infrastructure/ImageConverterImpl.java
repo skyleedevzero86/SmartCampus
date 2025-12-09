@@ -1,5 +1,6 @@
 package com.sleekydz86.server.market.board.infrastructure;
 
+import com.sleekydz86.server.global.exception.exceptions.UnsupportedImageFormatException;
 import com.sleekydz86.server.market.board.domain.Image;
 import com.sleekydz86.server.market.community.domain.ImageConverter;
 import org.springframework.stereotype.Component;
