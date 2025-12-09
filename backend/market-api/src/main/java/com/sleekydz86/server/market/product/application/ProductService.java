@@ -1,10 +1,15 @@
 package com.sleekydz86.server.market.product.application;
 
 import com.sleekydz86.server.global.event.Events;
+import com.sleekydz86.server.global.exception.exceptions.market.ProductNotFoundException;
+import com.sleekydz86.server.market.product.application.dto.ProductCreateRequest;
+import com.sleekydz86.server.market.product.application.dto.ProductUpdateRequest;
+import com.sleekydz86.server.market.product.application.dto.ProductUpdateResult;
 import com.sleekydz86.server.market.product.application.dto.UsingCouponRequest;
 import com.sleekydz86.server.market.product.domain.Product;
 import com.sleekydz86.server.market.product.domain.ProductLike;
 import com.sleekydz86.server.market.product.domain.event.CouponExistValidatedEvent;
+import com.sleekydz86.server.market.product.domain.event.ProductSoldEvent;
 import com.sleekydz86.server.market.product.domain.event.UsedCouponDeletedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

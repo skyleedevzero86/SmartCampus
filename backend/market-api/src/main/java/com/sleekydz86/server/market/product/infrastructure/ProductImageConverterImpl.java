@@ -1,5 +1,6 @@
 package com.sleekydz86.server.market.product.infrastructure;
 
+import com.sleekydz86.server.market.product.application.ProductImageConverter;
 import com.sleekydz86.server.market.product.domain.ProductImage;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;

@@ -1,7 +1,10 @@
 package com.sleekydz86.server.market.board.infrastructure;
 
+import com.sleekydz86.server.market.board.application.dto.BoardFoundResponse;
+import com.sleekydz86.server.market.board.application.dto.BoardSimpleResponse;
 import com.sleekydz86.server.market.board.domain.Board;
 import com.sleekydz86.server.market.board.domain.BoardRepository;
+import com.sleekydz86.server.market.board.infrastructure.mapper.BoardMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

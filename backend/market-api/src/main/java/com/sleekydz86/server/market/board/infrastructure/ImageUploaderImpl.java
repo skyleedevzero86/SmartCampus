@@ -1,5 +1,8 @@
 package com.sleekydz86.server.market.board.infrastructure;
 
+import com.sleekydz86.server.global.exception.exceptions.FileUploadFailureException;
+import com.sleekydz86.server.market.board.application.ImageUploader;
+import com.sleekydz86.server.market.board.domain.Image;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

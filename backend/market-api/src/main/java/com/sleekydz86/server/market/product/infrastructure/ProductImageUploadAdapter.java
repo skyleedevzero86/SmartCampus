@@ -1,6 +1,7 @@
 package com.sleekydz86.server.market.product.infrastructure;
 
-
+import com.sleekydz86.server.global.exception.exceptions.FileUploadFailureException;
+import com.sleekydz86.server.market.product.application.ProductImageUploadPort;
 import com.sleekydz86.server.market.product.domain.ProductImage;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +18,6 @@ import java.util.stream.IntStream;
 @Slf4j
 @Service
 @Profile("local")
-
 public class ProductImageUploadAdapter implements ProductImageUploadPort {
 
     @Value("${file.upload.location}")
@@ -63,3 +63,4 @@ public class ProductImageUploadAdapter implements ProductImageUploadPort {
         new File(location + fileUniqueName).delete();
     }
 }
+

@@ -1,10 +1,13 @@
 package com.sleekydz86.server.market.product.application;
 
+import com.sleekydz86.server.global.exception.exceptions.market.ProductNotFoundException;
+import com.sleekydz86.server.market.product.application.dto.ProductWithImageResponse;
 import com.sleekydz86.server.market.product.domain.dto.ProductImageResponse;
 import com.sleekydz86.server.market.product.domain.dto.ProductPagingSimpleResponse;
 import com.sleekydz86.server.market.product.domain.dto.ProductSpecificResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

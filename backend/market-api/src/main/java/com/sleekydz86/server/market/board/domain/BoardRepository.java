@@ -1,5 +1,7 @@
 package com.sleekydz86.server.market.board.domain;
 
+import com.sleekydz86.server.market.board.application.dto.BoardFoundResponse;
+import com.sleekydz86.server.market.board.application.dto.BoardSimpleResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

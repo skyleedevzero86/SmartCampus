@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static com.querydsl.core.types.Projections.constructor;
-import static com.sleekydz86.server.market.domain.product.QProduct.product;
+import static com.sleekydz86.server.market.product.domain.QProduct.product;
 
 @RequiredArgsConstructor
 @Repository
