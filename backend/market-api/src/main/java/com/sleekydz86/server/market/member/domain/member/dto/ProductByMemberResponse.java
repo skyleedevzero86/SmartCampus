@@ -1,5 +1,8 @@
 package com.sleekydz86.server.market.member.domain.member.dto;
 
+import com.sleekydz86.server.market.product.domain.vo.Location;
+import com.sleekydz86.server.market.product.domain.vo.ProductStatus;
+
 import java.time.LocalDateTime;
 
 public record ProductByMemberResponse(

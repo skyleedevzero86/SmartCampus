@@ -1,5 +1,6 @@
 package com.sleekydz86.server.market.community.domain;
 
+import com.sleekydz86.server.market.board.domain.Image;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

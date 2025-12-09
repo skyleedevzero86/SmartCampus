@@ -7,7 +7,9 @@ import com.sleekydz86.server.market.comment.infrastructure.mapper.CommentMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -20,7 +22,15 @@ public class CommentRepositoryImpl implements CommentRepository {
 
     @Override
     public Comment save(final Comment comment) {
-        commentMapper.save(comment);
+        Map<String, Object> params = new HashMap<>();
+        params.put("operation", "C");
+        params.put("id", null);
+        params.put("content", comment.getContent());
+        params.put("writerId", comment.getWriterId());
+        params.put("boardId", comment.getBoardId());
+        params.put("resultMessage", null);
+        params.put("affectedRows", null);
+        commentMapper.executeCommentCUD(params);
         return comment;
     }
 
@@ -35,7 +45,15 @@ public class CommentRepositoryImpl implements CommentRepository {
 
     @Override
     public void deleteById(final Long id) {
-        commentMapper.deleteById(id);
+        Map<String, Object> params = new HashMap<>();
+        params.put("operation", "D");
+        params.put("id", id);
+        params.put("content", null);
+        params.put("writerId", null);
+        params.put("boardId", null);
+        params.put("resultMessage", null);
+        params.put("affectedRows", null);
+        commentMapper.executeCommentCUD(params);
     }
 
     @Override

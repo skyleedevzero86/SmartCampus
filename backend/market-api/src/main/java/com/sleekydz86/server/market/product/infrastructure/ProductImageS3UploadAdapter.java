@@ -4,6 +4,8 @@ import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.sleekydz86.server.global.exception.exceptions.FileUploadFailureException;
+import com.sleekydz86.server.market.product.application.ProductImageUploadPort;
 import com.sleekydz86.server.market.product.domain.ProductImage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +14,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -72,3 +75,4 @@ public class ProductImageS3UploadAdapter implements ProductImageUploadPort {
         log.info("File delete complete: " + objectKey);
     }
 }
+

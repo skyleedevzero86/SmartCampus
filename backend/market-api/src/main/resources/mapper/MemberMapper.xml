@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.server.member.infrastructure.member.mapper.MemberMapper">
+<mapper namespace="com.sleekydz86.server.market.member.infrastructure.mapper.MemberMapper">
 
-    <resultMap id="MemberResultMap" type="com.server.member.domain.member.Member">
+    <resultMap id="MemberResultMap" type="com.sleekydz86.server.market.member.domain.member.Member">
         <id property="id" column="id"/>
         <result property="email" column="email"/>
         <result property="password" column="password"/>
@@ -11,11 +11,6 @@
         <result property="createdAt" column="created_at"/>
         <result property="updatedAt" column="updated_at"/>
     </resultMap>
-
-    <insert id="save" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO member (email, password, nickname, member_role, created_at, updated_at)
-        VALUES (#{email}, #{password}, #{nickname}, #{memberRole}, NOW(), NOW())
-    </insert>
 
     <select id="findById" resultMap="MemberResultMap">
         SELECT id, email, password, nickname, member_role, created_at, updated_at
@@ -41,8 +36,17 @@
         WHERE email = #{email}
     </select>
 
+    <select id="executeMemberCUD" statementType="CALLABLE" parameterType="map">
+        {CALL sp_member_cud(
+            #{operation, mode=IN, jdbcType=CHAR},
+            #{id, mode=IN, jdbcType=BIGINT},
+            #{email, mode=IN, jdbcType=VARCHAR},
+            #{password, mode=IN, jdbcType=VARCHAR},
+            #{nickname, mode=IN, jdbcType=VARCHAR},
+            #{memberRole, mode=IN, jdbcType=VARCHAR},
+            #{resultMessage, mode=OUT, jdbcType=VARCHAR},
+            #{affectedRows, mode=OUT, jdbcType=INTEGER}
+        )}
+    </select>
+
 </mapper>
-
-
-
-

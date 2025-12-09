@@ -13,6 +13,8 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 import static com.querydsl.core.types.Projections.constructor;
+import static com.sleekydz86.server.market.coupon.domain.QCoupon.coupon;
+import static com.sleekydz86.server.market.voucher.domain.QVoucher.voucher;
 
 @RequiredArgsConstructor
 @Repository

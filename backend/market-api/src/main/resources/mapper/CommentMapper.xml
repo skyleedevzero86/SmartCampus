@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.server.community.infrastructure.comment.mapper.CommentMapper">
+<mapper namespace="com.sleekydz86.server.market.comment.infrastructure.mapper.CommentMapper">
 
-    <resultMap id="CommentResultMap" type="com.server.community.domain.comment.Comment">
+    <resultMap id="CommentResultMap" type="com.sleekydz86.server.market.comment.domain.Comment">
         <id property="id" column="id"/>
         <result property="content" column="content"/>
         <result property="writerId" column="writer_id"/>
@@ -11,23 +11,23 @@
         <result property="updatedAt" column="updated_at"/>
     </resultMap>
 
-    <insert id="save" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO comment (content, writer_id, board_id, created_at, updated_at)
-        VALUES (#{content}, #{writerId}, #{boardId}, NOW(), NOW())
-    </insert>
-
     <select id="findById" resultMap="CommentResultMap">
         SELECT id, content, writer_id, board_id, created_at, updated_at
         FROM comment
         WHERE id = #{id}
     </select>
 
-    <delete id="deleteById">
-        DELETE FROM comment WHERE id = #{id}
-    </delete>
+    <select id="executeCommentCUD" statementType="CALLABLE" parameterType="map">
+        {CALL sp_comment_cud(
+            #{operation, mode=IN, jdbcType=CHAR},
+            #{id, mode=IN, jdbcType=BIGINT},
+            #{content, mode=IN, jdbcType=LONGVARCHAR},
+            #{writerId, mode=IN, jdbcType=BIGINT},
+            #{boardId, mode=IN, jdbcType=BIGINT},
+            #{resultMessage, mode=OUT, jdbcType=VARCHAR},
+            #{affectedRows, mode=OUT, jdbcType=INTEGER}
+        )}
+    </select>
 
 </mapper>
-
-
-
 

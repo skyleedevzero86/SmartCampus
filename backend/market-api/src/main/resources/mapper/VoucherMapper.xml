@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.server.coupon.infrastructure.voucher.mapper.VoucherMapper">
+<mapper namespace="com.sleekydz86.server.market.voucher.infrastructure.mapper.VoucherMapper">
 
-    <resultMap id="VoucherResultMap" type="com.server.coupon.domain.voucher.Voucher">
+    <resultMap id="VoucherResultMap" type="com.sleekydz86.server.market.voucher.domain.Voucher">
         <id property="id" column="id"/>
         <result property="couponId" column="coupon_id"/>
         <result property="description" column="description"/>
@@ -13,19 +13,24 @@
         <result property="updatedAt" column="updated_at"/>
     </resultMap>
 
-    <insert id="save" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO voucher (coupon_id, description, voucher_number, is_public, is_used, created_at, updated_at)
-        VALUES (#{couponId}, #{description}, #{voucherNumber}, #{isPublic}, #{isUsed}, NOW(), NOW())
-    </insert>
-
     <select id="findById" resultMap="VoucherResultMap">
         SELECT id, coupon_id, description, voucher_number, is_public, is_used, created_at, updated_at
         FROM voucher
         WHERE id = #{id}
     </select>
 
+    <select id="executeVoucherCUD" statementType="CALLABLE" parameterType="map">
+        {CALL sp_voucher_cud(
+            #{operation, mode=IN, jdbcType=CHAR},
+            #{id, mode=IN, jdbcType=BIGINT},
+            #{couponId, mode=IN, jdbcType=BIGINT},
+            #{description, mode=IN, jdbcType=VARCHAR},
+            #{voucherNumber, mode=IN, jdbcType=VARCHAR},
+            #{isPublic, mode=IN, jdbcType=BOOLEAN},
+            #{isUsed, mode=IN, jdbcType=BOOLEAN},
+            #{resultMessage, mode=OUT, jdbcType=VARCHAR},
+            #{affectedRows, mode=OUT, jdbcType=INTEGER}
+        )}
+    </select>
+
 </mapper>
-
-
-
-

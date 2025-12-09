@@ -1,5 +1,6 @@
 package com.sleekydz86.server.market.member.infrastructure.member;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sleekydz86.server.market.member.domain.member.dto.TradeHistoryResponse;
 import lombok.RequiredArgsConstructor;
@@ -9,8 +10,9 @@ import java.util.List;
 import java.util.function.Function;
 
 import static com.querydsl.core.types.Projections.constructor;
-import static com.sleekydz86.server.market.domain.product.QProduct.product;
-import static com.sleekydz86.server.member.domain.member.QTradeHistory.tradeHistory;
+import static com.sleekydz86.server.market.product.domain.QProduct.product;
+import static com.sleekydz86.server.market.member.domain.member.QTradeHistory.tradeHistory;
+import com.sleekydz86.server.market.member.domain.member.QMember;
 
 @RequiredArgsConstructor
 @Repository

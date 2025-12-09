@@ -7,7 +7,9 @@ import com.sleekydz86.server.market.member.infrastructure.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -34,7 +36,16 @@ public class MemberRepositoryImpl implements MemberRepository {
 
     @Override
     public Member save(final Member member) {
-        memberMapper.save(member);
+        Map<String, Object> params = new HashMap<>();
+        params.put("operation", "C");
+        params.put("id", null);
+        params.put("email", member.getEmail());
+        params.put("password", member.getPassword());
+        params.put("nickname", member.getNickname());
+        params.put("memberRole", member.getMemberRole().name());
+        params.put("resultMessage", null);
+        params.put("affectedRows", null);
+        memberMapper.executeMemberCUD(params);
         return member;
     }
 

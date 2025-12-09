@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sleekydz86.alerm.batch.infrastructure.mail.mapper.MailStorageMapper">
+
+    <resultMap id="MailStorageResultMap" type="com.sleekydz86.alerm.batch.domain.mail.MailStorage">
+        <id property="id" column="id"/>
+        <result property="mailStatus" column="mail_status" typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <association property="receiver" javaType="com.sleekydz86.alerm.batch.domain.mail.vo.Receiver">
+            <result property="memberId" column="member_id"/>
+            <result property="email" column="email"/>
+            <result property="nickname" column="nickname"/>
+        </association>
+    </resultMap>
+
+    <select id="executeMailStorageCUD" statementType="CALLABLE" parameterType="map">
+        {CALL sp_mail_storage_cud(
+            #{operation, mode=IN, jdbcType=CHAR},
+            #{id, mode=IN, jdbcType=BIGINT},
+            #{memberId, mode=IN, jdbcType=BIGINT},
+            #{email, mode=IN, jdbcType=VARCHAR},
+            #{nickname, mode=IN, jdbcType=VARCHAR},
+            #{mailStatus, mode=IN, jdbcType=VARCHAR},
+            #{resultMessage, mode=OUT, jdbcType=VARCHAR},
+            #{affectedRows, mode=OUT, jdbcType=INTEGER}
+        )}
+    </select>
+
+    <select id="findById" resultMap="MailStorageResultMap">
+        SELECT id, member_id, email, nickname, mail_status, created_at, updated_at
+        FROM mail_storage
+        WHERE id = #{id}
+    </select>
+
+    <select id="findAllByMailStatus" resultMap="MailStorageResultMap">
+        SELECT id, member_id, email, nickname, mail_status, created_at, updated_at
+        FROM v_mail_storage_by_status
+        WHERE mail_status = #{mailStatus}
+    </select>
+
+</mapper>
+
+
+
+

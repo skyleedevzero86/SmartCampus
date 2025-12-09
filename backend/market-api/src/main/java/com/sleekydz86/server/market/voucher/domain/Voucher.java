@@ -1,6 +1,8 @@
 package com.sleekydz86.server.market.voucher.domain;
 
 import com.sleekydz86.server.global.domain.BaseEntity;
+import com.sleekydz86.server.global.exception.exceptions.coupon.VoucherAlreadyUsedException;
+import com.sleekydz86.server.global.exception.exceptions.coupon.VoucherNumbersNotEqualsException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

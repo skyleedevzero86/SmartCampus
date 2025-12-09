@@ -1,6 +1,7 @@
 package com.sleekydz86.server.market.member.application.member;
 
 import com.sleekydz86.server.market.member.application.member.dto.TradeHistoryCreateRequest;
+import com.sleekydz86.server.market.product.domain.event.ProductSoldEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;

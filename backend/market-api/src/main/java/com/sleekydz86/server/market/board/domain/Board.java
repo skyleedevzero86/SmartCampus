@@ -1,6 +1,7 @@
 package com.sleekydz86.server.market.board.domain;
 
 import com.sleekydz86.server.global.domain.BaseEntity;
+import com.sleekydz86.server.market.board.domain.dto.BoardUpdateResult;
 import com.sleekydz86.server.market.community.domain.ImageConverter;
 import com.sleekydz86.server.market.community.domain.vo.LikeCount;
 import com.sleekydz86.server.market.community.domain.vo.Post;

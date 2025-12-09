@@ -1,10 +1,11 @@
 package com.sleekydz86.server.market.category.infrastructure.mapper;
 
-import com.sleekydz86.server.market.category.domain.Category;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.Map;
 
 @Mapper
 public interface CategoryMapper {
 
-    void save(Category category);
+    void executeCategoryCUD(Map<String, Object> params);
 }

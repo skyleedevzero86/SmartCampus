@@ -1,11 +1,9 @@
 package com.sleekydz86.server.market.category.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.Arrays;
 
-@AllArgsConstructor
 @Getter
 public enum CategoryName {
 
@@ -17,6 +15,11 @@ public enum CategoryName {
 
     private final String name;
     private final int categoryId;
+
+    CategoryName(final String name, final int categoryId) {
+        this.name = name;
+        this.categoryId = categoryId;
+    }
 
     public static CategoryName from(final Long categoryId) {
         return Arrays.stream(values())

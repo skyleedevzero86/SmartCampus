@@ -1,6 +1,7 @@
 package com.sleekydz86.server.market.product.domain.dto;
 
 import com.sleekydz86.server.market.category.domain.CategoryName;
+import com.sleekydz86.server.market.product.domain.vo.Location;
 import com.sleekydz86.server.market.product.domain.vo.ProductStatus;
 
 import java.time.LocalDateTime;
