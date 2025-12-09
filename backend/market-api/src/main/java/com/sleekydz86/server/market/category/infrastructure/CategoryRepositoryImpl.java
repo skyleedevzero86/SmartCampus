@@ -6,6 +6,9 @@ import com.sleekydz86.server.market.category.infrastructure.mapper.CategoryMappe
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RequiredArgsConstructor
 @Repository
 public class CategoryRepositoryImpl implements CategoryRepository {
@@ -14,7 +17,13 @@ public class CategoryRepositoryImpl implements CategoryRepository {
 
     @Override
     public Category save(final Category category) {
-        categoryMapper.save(category);
+        Map<String, Object> params = new HashMap<>();
+        params.put("operation", "C");
+        params.put("id", null);
+        params.put("name", category.getName().name());
+        params.put("resultMessage", null);
+        params.put("affectedRows", null);
+        categoryMapper.executeCategoryCUD(params);
         return category;
     }
 }

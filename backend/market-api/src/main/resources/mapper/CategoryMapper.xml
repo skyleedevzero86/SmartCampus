@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.server.market.infrastructure.category.mapper.CategoryMapper">
+<mapper namespace="com.sleekydz86.server.market.category.infrastructure.mapper.CategoryMapper">
 
-    <resultMap id="CategoryResultMap" type="com.server.market.domain.category.Category">
+    <resultMap id="CategoryResultMap" type="com.sleekydz86.server.market.category.domain.Category">
         <id property="id" column="id"/>
         <result property="name" column="name" typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
         <result property="createdAt" column="created_at"/>
         <result property="updatedAt" column="updated_at"/>
     </resultMap>
 
-    <insert id="save" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO category (name, created_at, updated_at)
-        VALUES (#{name}, NOW(), NOW())
-    </insert>
+    <select id="executeCategoryCUD" statementType="CALLABLE" parameterType="map">
+        {CALL sp_category_cud(
+            #{operation, mode=IN, jdbcType=CHAR},
+            #{id, mode=IN, jdbcType=BIGINT},
+            #{name, mode=IN, jdbcType=VARCHAR},
+            #{resultMessage, mode=OUT, jdbcType=VARCHAR},
+            #{affectedRows, mode=OUT, jdbcType=INTEGER}
+        )}
+    </select>
 
 </mapper>
-
-
-
-

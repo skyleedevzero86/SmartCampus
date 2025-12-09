@@ -5,13 +5,14 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface TradeHistoryMapper {
 
-    void save(TradeHistory tradeHistory);
-
     List<TradeHistory> findAllByBuyerId(@Param("buyerId") Long buyerId);
 
     List<TradeHistory> findAllBySellerId(@Param("sellerId") Long sellerId);
+
+    void executeTradeHistoryCUD(Map<String, Object> params);
 }

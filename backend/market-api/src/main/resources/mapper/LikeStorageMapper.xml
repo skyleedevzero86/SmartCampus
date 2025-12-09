@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.server.community.infrastructure.board.mapper.LikeStorageMapper">
+<mapper namespace="com.sleekydz86.server.market.board.infrastructure.mapper.LikeStorageMapper">
 
-    <resultMap id="LikeStorageResultMap" type="com.server.community.domain.board.LikeStorage">
+    <resultMap id="LikeStorageResultMap" type="com.sleekydz86.server.market.board.domain.LikeStorage">
         <id property="id" column="id"/>
         <result property="boardId" column="board_id"/>
         <result property="memberId" column="member_id"/>
@@ -10,24 +10,21 @@
         <result property="updatedAt" column="updated_at"/>
     </resultMap>
 
-    <insert id="save" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO like_storage (board_id, member_id, created_at, updated_at)
-        VALUES (#{boardId}, #{memberId}, NOW(), NOW())
-    </insert>
-
     <select id="existsByBoardIdAndMemberId" resultType="boolean">
         SELECT COUNT(*) > 0
         FROM like_storage
         WHERE board_id = #{boardId} AND member_id = #{memberId}
     </select>
 
-    <delete id="deleteByBoardIdAndMemberId">
-        DELETE FROM like_storage
-        WHERE board_id = #{boardId} AND member_id = #{memberId}
-    </delete>
+    <select id="executeLikeStorageCUD" statementType="CALLABLE" parameterType="map">
+        {CALL sp_like_storage_cud(
+            #{operation, mode=IN, jdbcType=CHAR},
+            #{id, mode=IN, jdbcType=BIGINT},
+            #{boardId, mode=IN, jdbcType=BIGINT},
+            #{memberId, mode=IN, jdbcType=BIGINT},
+            #{resultMessage, mode=OUT, jdbcType=VARCHAR},
+            #{affectedRows, mode=OUT, jdbcType=INTEGER}
+        )}
+    </select>
 
 </mapper>
-
-
-
-

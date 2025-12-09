@@ -1,19 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.server.coupon.infrastructure.coupon.mapper.MemberCouponMapper">
+<mapper namespace="com.sleekydz86.server.market.coupon.infrastructure.mapper.MemberCouponMapper">
 
-    <resultMap id="MemberCouponResultMap" type="com.server.coupon.domain.coupon.MemberCoupon">
+    <resultMap id="MemberCouponResultMap" type="com.sleekydz86.server.market.coupon.domain.MemberCoupon">
         <id property="id" column="id"/>
         <result property="memberId" column="member_id"/>
         <result property="couponId" column="coupon_id"/>
         <result property="createdAt" column="created_at"/>
         <result property="updatedAt" column="updated_at"/>
     </resultMap>
-
-    <insert id="save" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO member_coupon (member_id, coupon_id, created_at, updated_at)
-        VALUES (#{memberId}, #{couponId}, NOW(), NOW())
-    </insert>
 
     <select id="findAllByMemberId" resultMap="MemberCouponResultMap">
         SELECT id, member_id, coupon_id, created_at, updated_at
@@ -38,8 +33,15 @@
         </foreach>
     </select>
 
+    <select id="executeMemberCouponCUD" statementType="CALLABLE" parameterType="map">
+        {CALL sp_member_coupon_cud(
+            #{operation, mode=IN, jdbcType=CHAR},
+            #{id, mode=IN, jdbcType=BIGINT},
+            #{memberId, mode=IN, jdbcType=BIGINT},
+            #{couponId, mode=IN, jdbcType=BIGINT},
+            #{resultMessage, mode=OUT, jdbcType=VARCHAR},
+            #{affectedRows, mode=OUT, jdbcType=INTEGER}
+        )}
+    </select>
+
 </mapper>
-
-
-
-

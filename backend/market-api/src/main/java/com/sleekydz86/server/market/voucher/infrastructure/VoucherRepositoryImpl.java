@@ -10,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -21,7 +23,17 @@ public class VoucherRepositoryImpl implements VoucherRepository {
 
     @Override
     public Voucher save(final Voucher voucher) {
-        voucherMapper.save(voucher);
+        Map<String, Object> params = new HashMap<>();
+        params.put("operation", "C");
+        params.put("id", null);
+        params.put("couponId", voucher.getCouponId());
+        params.put("description", voucher.getDescription());
+        params.put("voucherNumber", voucher.getVoucherNumber());
+        params.put("isPublic", voucher.getIsPublic());
+        params.put("isUsed", voucher.getIsUsed());
+        params.put("resultMessage", null);
+        params.put("affectedRows", null);
+        voucherMapper.executeVoucherCUD(params);
         return voucher;
     }
 

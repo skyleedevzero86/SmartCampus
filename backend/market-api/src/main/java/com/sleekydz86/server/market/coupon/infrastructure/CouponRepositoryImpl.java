@@ -6,7 +6,9 @@ import com.sleekydz86.server.market.coupon.infrastructure.mapper.CouponMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -17,7 +19,17 @@ public class CouponRepositoryImpl implements CouponRepository {
 
     @Override
     public Coupon save(final Coupon coupon) {
-        couponMapper.save(coupon);
+        Map<String, Object> params = new HashMap<>();
+        params.put("operation", "C");
+        params.put("id", null);
+        params.put("name", coupon.getDescription().getName());
+        params.put("content", coupon.getDescription().getContent());
+        params.put("canUseAlone", coupon.getPolicy().isCanUseAlone());
+        params.put("isDiscountPercentage", coupon.getPolicy().isDiscountPercentage());
+        params.put("amount", coupon.getPolicy().getAmount());
+        params.put("resultMessage", null);
+        params.put("affectedRows", null);
+        couponMapper.executeCouponCUD(params);
         return coupon;
     }
 
@@ -28,7 +40,17 @@ public class CouponRepositoryImpl implements CouponRepository {
 
     @Override
     public void deleteById(final Long id) {
-        couponMapper.deleteById(id);
+        Map<String, Object> params = new HashMap<>();
+        params.put("operation", "D");
+        params.put("id", id);
+        params.put("name", null);
+        params.put("content", null);
+        params.put("canUseAlone", null);
+        params.put("isDiscountPercentage", null);
+        params.put("amount", null);
+        params.put("resultMessage", null);
+        params.put("affectedRows", null);
+        couponMapper.executeCouponCUD(params);
     }
 
     @Override

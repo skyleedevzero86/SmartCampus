@@ -5,17 +5,18 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface MemberCouponMapper {
-
-    void save(MemberCoupon memberCoupon);
 
     List<MemberCoupon> findAllByMemberId(@Param("memberId") Long memberId);
 
     void deleteByMemberIdAndCouponIdIn(@Param("memberId") Long memberId, @Param("couponIds") List<Long> couponIds);
 
     int countMemberIdWithCouponIds(@Param("memberId") Long memberId, @Param("couponIds") List<Long> couponIds);
+
+    void executeMemberCouponCUD(Map<String, Object> params);
 }
 
 

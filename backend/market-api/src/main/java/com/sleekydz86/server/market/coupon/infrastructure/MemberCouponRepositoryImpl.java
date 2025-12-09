@@ -6,7 +6,9 @@ import com.sleekydz86.server.market.coupon.infrastructure.mapper.MemberCouponMap
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Repository
@@ -22,7 +24,14 @@ public class MemberCouponRepositoryImpl implements MemberCouponRepository {
 
     @Override
     public MemberCoupon save(final MemberCoupon memberCoupon) {
-        memberCouponMapper.save(memberCoupon);
+        Map<String, Object> params = new HashMap<>();
+        params.put("operation", "C");
+        params.put("id", null);
+        params.put("memberId", memberCoupon.getMemberId());
+        params.put("couponId", memberCoupon.getCouponId());
+        params.put("resultMessage", null);
+        params.put("affectedRows", null);
+        memberCouponMapper.executeMemberCouponCUD(params);
         return memberCoupon;
     }
 

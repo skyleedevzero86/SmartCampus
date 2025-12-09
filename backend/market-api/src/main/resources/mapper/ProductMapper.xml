@@ -1,46 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.server.market.infrastructure.product.mapper.ProductMapper">
+<mapper namespace="com.sleekydz86.server.market.product.infrastructure.mapper.ProductMapper">
 
-    <resultMap id="ProductResultMap" type="com.server.market.domain.product.Product">
+    <resultMap id="ProductResultMap" type="com.sleekydz86.server.market.product.domain.Product">
         <id property="id" column="id"/>
         <result property="productStatus" column="product_status" typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
         <result property="categoryId" column="category_id"/>
         <result property="memberId" column="member_id"/>
         <result property="createdAt" column="created_at"/>
         <result property="updatedAt" column="updated_at"/>
-        <association property="description" javaType="com.server.market.domain.product.vo.Description">
+        <association property="description" javaType="com.sleekydz86.server.market.product.domain.vo.Description">
             <result property="title" column="title"/>
             <result property="content" column="content"/>
-            <association property="location" javaType="com.server.market.domain.product.vo.Location">
+            <association property="location" javaType="com.sleekydz86.server.market.product.domain.vo.Location">
                 <result property="value" column="location"/>
             </association>
         </association>
-        <association property="price" javaType="com.server.market.domain.product.vo.Price">
+        <association property="price" javaType="com.sleekydz86.server.market.product.domain.vo.Price">
             <result property="value" column="price"/>
         </association>
-        <association property="statisticCount" javaType="com.server.market.domain.product.vo.StatisticCount">
+        <association property="statisticCount" javaType="com.sleekydz86.server.market.product.domain.vo.StatisticCount">
             <result property="viewCount" column="view_count"/>
             <result property="likeCount" column="like_count"/>
         </association>
     </resultMap>
-
-    <insert id="save" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO product (title, content, location, price, view_count, like_count, product_status, category_id, member_id, created_at, updated_at)
-        VALUES (
-                   #{description.title},
-                   #{description.content},
-                   #{description.location.value},
-                   #{price.value},
-                   #{statisticCount.viewCount},
-                   #{statisticCount.likeCount},
-                   #{productStatus},
-                   #{categoryId},
-                   #{memberId},
-                   NOW(),
-                   NOW()
-               )
-    </insert>
 
     <select id="findById" resultMap="ProductResultMap">
         SELECT id, title, content, location, price, view_count, like_count, product_status, category_id, member_id, created_at, updated_at
@@ -56,18 +39,28 @@
             FOR UPDATE
     </select>
 
-    <delete id="deleteById">
-        DELETE FROM product WHERE id = #{id}
-    </delete>
-
     <select id="findAllByCategoryId" resultMap="ProductResultMap">
         SELECT id, title, content, location, price, view_count, like_count, product_status, category_id, member_id, created_at, updated_at
         FROM product
         WHERE category_id = #{categoryId}
     </select>
 
+    <select id="executeProductCUD" statementType="CALLABLE" parameterType="map">
+        {CALL sp_product_cud(
+            #{operation, mode=IN, jdbcType=CHAR},
+            #{id, mode=IN, jdbcType=BIGINT},
+            #{title, mode=IN, jdbcType=VARCHAR},
+            #{content, mode=IN, jdbcType=LONGVARCHAR},
+            #{location, mode=IN, jdbcType=VARCHAR},
+            #{price, mode=IN, jdbcType=INTEGER},
+            #{viewCount, mode=IN, jdbcType=INTEGER},
+            #{likeCount, mode=IN, jdbcType=INTEGER},
+            #{productStatus, mode=IN, jdbcType=VARCHAR},
+            #{categoryId, mode=IN, jdbcType=BIGINT},
+            #{memberId, mode=IN, jdbcType=BIGINT},
+            #{resultMessage, mode=OUT, jdbcType=VARCHAR},
+            #{affectedRows, mode=OUT, jdbcType=INTEGER}
+        )}
+    </select>
+
 </mapper>
-
-
-
-

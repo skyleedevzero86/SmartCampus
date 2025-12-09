@@ -10,7 +10,9 @@ import com.sleekydz86.server.market.product.infrastructure.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -23,7 +25,21 @@ public class ProductRepositoryAdapter implements ProductPersistencePort, Product
 
     @Override
     public Product save(final Product product) {
-        productMapper.save(product);
+        Map<String, Object> params = new HashMap<>();
+        params.put("operation", "C");
+        params.put("id", null);
+        params.put("title", product.getDescription().getTitle());
+        params.put("content", product.getDescription().getContent());
+        params.put("location", product.getDescription().getLocation().getValue());
+        params.put("price", product.getPrice().getValue());
+        params.put("viewCount", product.getStatisticCount().getViewCount());
+        params.put("likeCount", product.getStatisticCount().getLikeCount());
+        params.put("productStatus", product.getProductStatus().name());
+        params.put("categoryId", product.getCategoryId());
+        params.put("memberId", product.getMemberId());
+        params.put("resultMessage", null);
+        params.put("affectedRows", null);
+        productMapper.executeProductCUD(params);
         return product;
     }
 
@@ -39,7 +55,21 @@ public class ProductRepositoryAdapter implements ProductPersistencePort, Product
 
     @Override
     public void deleteProductById(final Long productId) {
-        productMapper.deleteById(productId);
+        Map<String, Object> params = new HashMap<>();
+        params.put("operation", "D");
+        params.put("id", productId);
+        params.put("title", null);
+        params.put("content", null);
+        params.put("location", null);
+        params.put("price", null);
+        params.put("viewCount", null);
+        params.put("likeCount", null);
+        params.put("productStatus", null);
+        params.put("categoryId", null);
+        params.put("memberId", null);
+        params.put("resultMessage", null);
+        params.put("affectedRows", null);
+        productMapper.executeProductCUD(params);
     }
 
     @Override
@@ -74,12 +104,26 @@ public class ProductRepositoryAdapter implements ProductPersistencePort, Product
 
     @Override
     public void deleteProductLikeByProductIdAndMemberId(final Long productId, final Long memberId) {
-        productLikeMapper.deleteByProductIdAndMemberId(productId, memberId);
+        Map<String, Object> params = new HashMap<>();
+        params.put("operation", "D");
+        params.put("id", null);
+        params.put("memberId", memberId);
+        params.put("productId", productId);
+        params.put("resultMessage", null);
+        params.put("affectedRows", null);
+        productLikeMapper.executeProductLikeCUD(params);
     }
 
     @Override
     public ProductLike saveProductLike(final ProductLike productLike) {
-        productLikeMapper.save(productLike);
+        Map<String, Object> params = new HashMap<>();
+        params.put("operation", "C");
+        params.put("id", null);
+        params.put("memberId", productLike.getMemberId());
+        params.put("productId", productLike.getProductId());
+        params.put("resultMessage", null);
+        params.put("affectedRows", null);
+        productLikeMapper.executeProductLikeCUD(params);
         return productLike;
     }
 }

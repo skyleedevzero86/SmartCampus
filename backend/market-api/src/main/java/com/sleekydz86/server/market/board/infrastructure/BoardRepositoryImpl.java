@@ -3,9 +3,12 @@ package com.sleekydz86.server.market.board.infrastructure;
 import com.sleekydz86.server.market.board.domain.Board;
 import com.sleekydz86.server.market.board.domain.BoardRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -17,7 +20,16 @@ public class BoardRepositoryImpl implements BoardRepository {
 
     @Override
     public Board save(final Board board) {
-        boardMapper.save(board);
+        Map<String, Object> params = new HashMap<>();
+        params.put("operation", "C");
+        params.put("id", null);
+        params.put("title", board.getPost().getTitle());
+        params.put("content", board.getPost().getContent());
+        params.put("writerId", board.getWriterId());
+        params.put("likeCount", board.getLikeCount().getValue());
+        params.put("resultMessage", null);
+        params.put("affectedRows", null);
+        boardMapper.executeBoardCUD(params);
         return board;
     }
 
@@ -48,6 +60,15 @@ public class BoardRepositoryImpl implements BoardRepository {
 
     @Override
     public void deleteByBoardId(final Long boardId) {
-        boardMapper.deleteById(boardId);
+        Map<String, Object> params = new HashMap<>();
+        params.put("operation", "D");
+        params.put("id", boardId);
+        params.put("title", null);
+        params.put("content", null);
+        params.put("writerId", null);
+        params.put("likeCount", null);
+        params.put("resultMessage", null);
+        params.put("affectedRows", null);
+        boardMapper.executeBoardCUD(params);
     }
 }
