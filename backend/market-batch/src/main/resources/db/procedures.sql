@@ -90,10 +90,8 @@ BEGIN
         END IF;
         
     ELSEIF p_operation = 'D' THEN
-        IF p_id IS NULL THEN
-            SET p_result_message = '삭제할 메일 저장소 ID는 필수 입력 항목입니다.';
-            ROLLBACK;
-        ELSE
+        IF p_id IS NOT NULL THEN
+            -- 단일 ID로 삭제
             SELECT COUNT(*) INTO v_count FROM mail_storage WHERE id = p_id FOR UPDATE;
             
             IF v_count = 0 THEN
@@ -106,6 +104,16 @@ BEGIN
                 SET p_result_message = CONCAT('메일 저장소가 성공적으로 삭제되었습니다. 삭제된 행 수: ', p_affected_rows);
                 COMMIT;
             END IF;
+        ELSEIF p_mail_status IS NOT NULL THEN
+            -- 상태별 일괄 삭제
+            DELETE FROM mail_storage WHERE mail_status = p_mail_status;
+            
+            SET p_affected_rows = ROW_COUNT();
+            SET p_result_message = CONCAT('상태별 메일 저장소가 성공적으로 삭제되었습니다. 삭제된 행 수: ', p_affected_rows);
+            COMMIT;
+        ELSE
+            SET p_result_message = '삭제할 메일 저장소 ID 또는 상태는 필수 입력 항목입니다.';
+            ROLLBACK;
         END IF;
     END IF;
     
@@ -121,6 +129,120 @@ SELECT
     created_at,
     updated_at
 FROM mail_storage;
+
+CREATE PROCEDURE sp_schedule_task_cud(
+    IN p_operation CHAR(1),
+    IN p_task_id VARCHAR(255),
+    IN p_execution_time DATETIME,
+    IN p_status VARCHAR(10),
+    OUT p_result_message VARCHAR(255),
+    OUT p_affected_rows INT
+)
+BEGIN
+    DECLARE v_count INT DEFAULT 0;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        GET DIAGNOSTICS CONDITION 1
+            @sqlstate = RETURNED_SQLSTATE,
+            @errno = MYSQL_ERRNO,
+            @text = MESSAGE_TEXT;
+        SET p_result_message = CONCAT('오류 발생: ', @text);
+        SET p_affected_rows = 0;
+    END;
+    
+    DECLARE EXIT HANDLER FOR SQLWARNING
+    BEGIN
+        ROLLBACK;
+        SET p_result_message = '경고가 발생했습니다.';
+        SET p_affected_rows = 0;
+    END;
+    
+    START TRANSACTION;
+    
+    SET p_affected_rows = 0;
+    SET p_result_message = '';
+    
+    IF p_operation NOT IN ('C', 'U', 'D') THEN
+        SET p_result_message = '잘못된 작업 코드입니다. C(생성), U(수정), D(삭제)만 사용 가능합니다.';
+        ROLLBACK;
+    ELSEIF p_operation = 'C' THEN
+        IF p_task_id IS NULL OR TRIM(p_task_id) = '' THEN
+            SET p_result_message = '작업 ID는 필수 입력 항목입니다.';
+            ROLLBACK;
+        ELSEIF p_execution_time IS NULL THEN
+            SET p_result_message = '실행 시간은 필수 입력 항목입니다.';
+            ROLLBACK;
+        ELSE
+            SELECT COUNT(*) INTO v_count FROM schedule_task WHERE task_id = p_task_id;
+            
+            IF v_count > 0 THEN
+                SET p_result_message = '이미 존재하는 작업 ID입니다.';
+                ROLLBACK;
+            ELSE
+                INSERT INTO schedule_task (task_id, execution_time, status)
+                VALUES (
+                    p_task_id,
+                    p_execution_time,
+                    IFNULL(p_status, 'WAITING')
+                );
+                
+                SET p_affected_rows = ROW_COUNT();
+                SET p_result_message = CONCAT('스케줄 작업이 성공적으로 생성되었습니다.');
+                COMMIT;
+            END IF;
+        END IF;
+        
+    ELSEIF p_operation = 'U' THEN
+        IF p_task_id IS NULL OR TRIM(p_task_id) = '' THEN
+            SET p_result_message = '수정할 작업 ID는 필수 입력 항목입니다.';
+            ROLLBACK;
+        ELSE
+            SELECT COUNT(*) INTO v_count FROM schedule_task WHERE task_id = p_task_id FOR UPDATE;
+            
+            IF v_count = 0 THEN
+                SET p_result_message = '수정할 스케줄 작업이 존재하지 않습니다.';
+                ROLLBACK;
+            ELSE
+                UPDATE schedule_task
+                SET execution_time = IFNULL(p_execution_time, execution_time),
+                    status = IFNULL(p_status, status)
+                WHERE task_id = p_task_id;
+                
+                SET p_affected_rows = ROW_COUNT();
+                SET p_result_message = CONCAT('스케줄 작업이 성공적으로 수정되었습니다. 수정된 행 수: ', p_affected_rows);
+                COMMIT;
+            END IF;
+        END IF;
+        
+    ELSEIF p_operation = 'D' THEN
+        IF p_task_id IS NULL OR TRIM(p_task_id) = '' THEN
+            SET p_result_message = '삭제할 작업 ID는 필수 입력 항목입니다.';
+            ROLLBACK;
+        ELSE
+            SELECT COUNT(*) INTO v_count FROM schedule_task WHERE task_id = p_task_id FOR UPDATE;
+            
+            IF v_count = 0 THEN
+                SET p_result_message = '삭제할 스케줄 작업이 존재하지 않습니다.';
+                ROLLBACK;
+            ELSE
+                DELETE FROM schedule_task WHERE task_id = p_task_id;
+                
+                SET p_affected_rows = ROW_COUNT();
+                SET p_result_message = CONCAT('스케줄 작업이 성공적으로 삭제되었습니다. 삭제된 행 수: ', p_affected_rows);
+                COMMIT;
+            END IF;
+        END IF;
+    END IF;
+    
+END$$
+
+CREATE OR REPLACE VIEW v_schedule_task_by_status AS
+SELECT 
+    task_id,
+    execution_time,
+    status
+FROM schedule_task;
 
 DELIMITER ;
 

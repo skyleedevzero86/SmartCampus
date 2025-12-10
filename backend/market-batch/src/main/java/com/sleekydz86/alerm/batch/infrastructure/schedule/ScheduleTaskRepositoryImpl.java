@@ -1,63 +1,104 @@
 package com.sleekydz86.alerm.batch.infrastructure.schedule;
 
+import com.sleekydz86.alerm.batch.domain.schedule.ScheduleTask;
+import com.sleekydz86.alerm.batch.domain.schedule.ScheduleTaskRepository;
 import com.sleekydz86.alerm.batch.domain.schedule.TaskStatus;
+import com.sleekydz86.alerm.batch.infrastructure.schedule.mapper.ScheduleTaskMapper;
+import com.sleekydz86.alerm.global.exception.DatabaseException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
+@Slf4j
 @RequiredArgsConstructor
 @Repository
-public class ScheduleTaskJdbcRepository {
+public class ScheduleTaskRepositoryImpl implements ScheduleTaskRepository {
 
-    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private final ScheduleTaskMapper scheduleTaskMapper;
 
+    @Override
     public void save(final ScheduleTask scheduleTask) {
-        String sql = "INSERT INTO schedule_task (task_id, execution_time, status) VALUES (:taskId, :executionTime, :status)";
-
-        MapSqlParameterSource parameters = new MapSqlParameterSource()
-                .addValue("taskId", scheduleTask.getTaskId())
-                .addValue("executionTime", scheduleTask.getExecutionTime())
-                .addValue("status", scheduleTask.getStatus().toString());
-
-        namedParameterJdbcTemplate.update(sql, parameters);
+        try {
+            Map<String, Object> params = new HashMap<>();
+            params.put("operation", "C");
+            params.put("taskId", scheduleTask.getTaskId());
+            params.put("executionTime", scheduleTask.getExecutionTime());
+            params.put("status", scheduleTask.getStatus().name());
+            params.put("resultMessage", "");
+            params.put("affectedRows", 0);
+            
+            scheduleTaskMapper.executeScheduleTaskCUD(params);
+            
+            validateProcedureResult(params, "C", scheduleTask.getTaskId());
+        } catch (Exception e) {
+            log.error("스케줄 작업 저장 실패 - taskId: {}", scheduleTask.getTaskId(), e);
+            throw new DatabaseException("스케줄 작업 저장 중 오류가 발생했습니다.", e);
+        }
     }
 
+    @Override
     public Optional<ScheduleTask> findById(final String taskId) {
-        String sql = "SELECT * FROM schedule_task WHERE task_id = :taskId";
-        MapSqlParameterSource parameters = new MapSqlParameterSource("taskId", taskId);
-
-        RowMapper<ScheduleTask> rowMapper = (rs, rowNum) -> {
-            ScheduleTask scheduleTask = ScheduleTask.builder()
-                    .taskId(rs.getString("task_id"))
-                    .executionTime(rs.getTimestamp("execution_time").toLocalDateTime())
-                    .status(TaskStatus.valueOf(rs.getString("status")))
-                    .build();
-            return scheduleTask;
-        };
-
-        List<ScheduleTask> result = namedParameterJdbcTemplate.query(sql, parameters, rowMapper);
-
-        return result.isEmpty() ? Optional.empty() : Optional.of(result.get(0));
+        try {
+            return Optional.ofNullable(scheduleTaskMapper.findById(taskId));
+        } catch (Exception e) {
+            log.error("스케줄 작업 조회 실패 - taskId: {}", taskId, e);
+            throw new DatabaseException("스케줄 작업 조회 중 오류가 발생했습니다.", e);
+        }
     }
 
+    @Override
     public void updateTaskStatusById(final String taskId, final TaskStatus taskStatus) {
-        String sql = "UPDATE schedule_task SET status = :status WHERE task_id = :taskId";
-
-        MapSqlParameterSource parameters = new MapSqlParameterSource()
-                .addValue("status", taskStatus.toString())
-                .addValue("taskId", taskId);
-
-        namedParameterJdbcTemplate.update(sql, parameters);
+        try {
+            Map<String, Object> params = new HashMap<>();
+            params.put("operation", "U");
+            params.put("taskId", taskId);
+            params.put("executionTime", null);
+            params.put("status", taskStatus.name());
+            params.put("resultMessage", "");
+            params.put("affectedRows", 0);
+            
+            scheduleTaskMapper.executeScheduleTaskCUD(params);
+            
+            validateProcedureResult(params, "U", taskId);
+        } catch (Exception e) {
+            log.error("스케줄 작업 상태 업데이트 실패 - taskId: {}, status: {}", taskId, taskStatus, e);
+            throw new DatabaseException("스케줄 작업 상태 업데이트 중 오류가 발생했습니다.", e);
+        }
     }
 
-
+    @Override
     public void deleteByTaskId(final String taskId) {
-        String sql = "DELETE FROM schedule_task WHERE task_id = :taskId";
-        namedParameterJdbcTemplate.update(sql, new MapSqlParameterSource("taskId", taskId));
+        try {
+            Map<String, Object> params = new HashMap<>();
+            params.put("operation", "D");
+            params.put("taskId", taskId);
+            params.put("executionTime", null);
+            params.put("status", null);
+            params.put("resultMessage", "");
+            params.put("affectedRows", 0);
+            
+            scheduleTaskMapper.executeScheduleTaskCUD(params);
+            
+            validateProcedureResult(params, "D", taskId);
+        } catch (Exception e) {
+            log.error("스케줄 작업 삭제 실패 - taskId: {}", taskId, e);
+            throw new DatabaseException("스케줄 작업 삭제 중 오류가 발생했습니다.", e);
+        }
+    }
+
+    private void validateProcedureResult(Map<String, Object> params, String operation, String taskId) {
+        Integer affectedRows = (Integer) params.get("affectedRows");
+        String resultMessage = (String) params.get("resultMessage");
+        
+        if (affectedRows == null || affectedRows <= 0) {
+            String errorMessage = resultMessage != null && !resultMessage.isEmpty() 
+                    ? resultMessage 
+                    : String.format("프로시저 실행 실패 (operation: %s, taskId: %s)", operation, taskId);
+            throw new DatabaseException(errorMessage);
+        }
     }
 }

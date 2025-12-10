@@ -1,9 +1,5 @@
 package com.sleekydz86.alerm.batch.domain.schedule;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,15 +14,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "taskId")
 @Builder
-@Entity
 public class ScheduleTask {
 
-    @Id
     private String taskId;
 
     private LocalDateTime executionTime;
 
-    @Enumerated(EnumType.STRING)
     private TaskStatus status;
 
     public static ScheduleTask createRunningTask(final String jobId, final LocalDateTime executionTime) {

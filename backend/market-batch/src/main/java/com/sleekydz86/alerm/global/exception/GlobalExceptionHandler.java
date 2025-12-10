@@ -27,7 +27,34 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> handleIllegalArgumentException(final IllegalArgumentException exception) {
         log.error("잘못된 인자 오류 발생: {}", exception.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(INTERNAL_SERVER_ERROR_MESSAGE);
+    }
 
+    @ExceptionHandler(DatabaseException.class)
+    public ResponseEntity<String> handleDatabaseException(final DatabaseException exception) {
+        log.error("데이터베이스 오류 발생: {}", exception.getMessage(), exception);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("데이터베이스 처리 중 오류가 발생했습니다.");
+    }
+
+    @ExceptionHandler(MailException.class)
+    public ResponseEntity<String> handleMailException(final MailException exception) {
+        log.error("메일 처리 오류 발생: {}", exception.getMessage(), exception);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("메일 처리 중 오류가 발생했습니다.");
+    }
+
+    @ExceptionHandler(ScheduleException.class)
+    public ResponseEntity<String> handleScheduleException(final ScheduleException exception) {
+        log.error("스케줄 작업 오류 발생: {}", exception.getMessage(), exception);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("스케줄 작업 처리 중 오류가 발생했습니다.");
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleException(final Exception exception) {
+        log.error("예상치 못한 오류 발생", exception);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(INTERNAL_SERVER_ERROR_MESSAGE);
     }

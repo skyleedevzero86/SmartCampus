@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sleekydz86.alerm.batch.infrastructure.schedule.mapper.ScheduleTaskMapper">
+
+    <resultMap id="ScheduleTaskResultMap" type="com.sleekydz86.alerm.batch.domain.schedule.ScheduleTask">
+        <id property="taskId" column="task_id"/>
+        <result property="executionTime" column="execution_time"/>
+        <result property="status" column="status" typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
+    </resultMap>
+
+    <select id="executeScheduleTaskCUD" statementType="CALLABLE" parameterType="map">
+        {CALL sp_schedule_task_cud(
+            #{operation, mode=IN, jdbcType=CHAR},
+            #{taskId, mode=IN, jdbcType=VARCHAR},
+            #{executionTime, mode=IN, jdbcType=TIMESTAMP},
+            #{status, mode=IN, jdbcType=VARCHAR},
+            #{resultMessage, mode=OUT, jdbcType=VARCHAR},
+            #{affectedRows, mode=OUT, jdbcType=INTEGER}
+        )}
+    </select>
+
+    <select id="findById" resultMap="ScheduleTaskResultMap">
+        SELECT task_id, execution_time, status
+        FROM schedule_task
+        WHERE task_id = #{taskId}
+    </select>
+
+</mapper>
+
