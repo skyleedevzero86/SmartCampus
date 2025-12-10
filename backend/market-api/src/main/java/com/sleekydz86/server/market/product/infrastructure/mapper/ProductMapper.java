@@ -1,5 +1,6 @@
 package com.sleekydz86.server.market.product.infrastructure.mapper;
 
+import com.sleekydz86.server.market.member.domain.member.dto.ProductByMemberResponse;
 import com.sleekydz86.server.market.product.domain.Product;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -18,4 +19,6 @@ public interface ProductMapper {
     List<Product> findAllByCategoryId(@Param("categoryId") Long categoryId);
 
     void executeProductCUD(Map<String, Object> params);
+
+    List<ProductByMemberResponse> findProductsByMemberId(@Param("memberId") Long memberId);
 }

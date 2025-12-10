@@ -14,6 +14,19 @@
         <result property="updatedAt" column="updated_at"/>
     </resultMap>
 
+    <resultMap id="TradeHistoryResponseMap" type="com.sleekydz86.server.market.member.domain.member.dto.TradeHistoryResponse">
+        <constructor>
+            <idArg column="trade_history_id" javaType="java.lang.Long"/>
+            <arg column="buyer_name" javaType="java.lang.String"/>
+            <arg column="seller_name" javaType="java.lang.String"/>
+            <arg column="product_id" javaType="java.lang.Long"/>
+            <arg column="product_title" javaType="java.lang.String"/>
+            <arg column="product_origin_price" javaType="int"/>
+            <arg column="product_discount_price" javaType="int"/>
+            <arg column="using_coupon_ids" javaType="java.lang.String"/>
+        </constructor>
+    </resultMap>
+
     <select id="findAllByBuyerId" resultMap="TradeHistoryResultMap">
         SELECT id, buyer_id, seller_id, product_id, product_origin_price, product_discount_price, using_coupon_ids, created_at, updated_at
         FROM trade_history
@@ -24,6 +37,34 @@
         SELECT id, buyer_id, seller_id, product_id, product_origin_price, product_discount_price, using_coupon_ids, created_at, updated_at
         FROM trade_history
         WHERE seller_id = #{sellerId}
+    </select>
+
+    <select id="findTradeHistoriesByBuyerId" resultMap="TradeHistoryResponseMap">
+        SELECT 
+            vthd.trade_history_id,
+            vthd.buyer_name,
+            vthd.seller_name,
+            vthd.product_id,
+            vthd.product_title,
+            vthd.product_origin_price,
+            vthd.product_discount_price,
+            vthd.using_coupon_ids
+        FROM v_trade_history_detail vthd
+        WHERE vthd.buyer_id = #{memberId}
+    </select>
+
+    <select id="findTradeHistoriesBySellerId" resultMap="TradeHistoryResponseMap">
+        SELECT 
+            vthd.trade_history_id,
+            vthd.buyer_name,
+            vthd.seller_name,
+            vthd.product_id,
+            vthd.product_title,
+            vthd.product_origin_price,
+            vthd.product_discount_price,
+            vthd.using_coupon_ids
+        FROM v_trade_history_detail vthd
+        WHERE vthd.seller_id = #{memberId}
     </select>
 
     <select id="executeTradeHistoryCUD" statementType="CALLABLE" parameterType="map">

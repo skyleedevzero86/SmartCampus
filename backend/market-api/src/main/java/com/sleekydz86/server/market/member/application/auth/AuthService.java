@@ -1,6 +1,8 @@
 package com.sleekydz86.server.market.member.application.auth;
 
 import com.sleekydz86.server.global.event.Events;
+import com.sleekydz86.server.global.exception.exceptions.member.MemberAlreadyExistedException;
+import com.sleekydz86.server.global.exception.exceptions.member.MemberNotFoundException;
 import com.sleekydz86.server.market.member.application.auth.dto.LoginRequest;
 import com.sleekydz86.server.market.member.application.auth.dto.SignupRequest;
 import com.sleekydz86.server.market.member.domain.auth.TokenProvider;

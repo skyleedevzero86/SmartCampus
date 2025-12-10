@@ -1,6 +1,7 @@
 package com.sleekydz86.server.market.board.application;
 
 import com.sleekydz86.server.global.event.Events;
+import com.sleekydz86.server.global.exception.exceptions.BoardNotFoundException;
 import com.sleekydz86.server.market.board.application.dto.BoardCreateRequest;
 import com.sleekydz86.server.market.board.application.dto.BoardUpdateRequest;
 import com.sleekydz86.server.market.board.domain.Board;

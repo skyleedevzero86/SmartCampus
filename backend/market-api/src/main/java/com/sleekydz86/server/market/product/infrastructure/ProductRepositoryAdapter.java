@@ -23,7 +23,6 @@ import java.util.Optional;
 public class ProductRepositoryAdapter implements ProductPersistencePort, ProductQueryPort, ProductLikePersistencePort {
 
     private final ProductMapper productMapper;
-    private final ProductQueryRepository productQueryRepository;
     private final ProductLikeMapper productLikeMapper;
 
     @Override
@@ -33,10 +32,10 @@ public class ProductRepositoryAdapter implements ProductPersistencePort, Product
         params.put("id", null);
         params.put("title", product.getDescription().getTitle());
         params.put("content", product.getDescription().getContent());
-        params.put("location", product.getDescription().getLocation().getValue());
-        params.put("price", product.getPrice().getValue());
-        params.put("viewCount", product.getStatisticCount().getViewCount());
-        params.put("likeCount", product.getStatisticCount().getLikeCount());
+        params.put("location", product.getDescription().getLocation().getContent());
+        params.put("price", product.getPrice().getPrice());
+        params.put("viewCount", product.getStatisticCount().getVisitedCount());
+        params.put("likeCount", product.getStatisticCount().getLikedCount());
         params.put("productStatus", product.getProductStatus().name());
         params.put("categoryId", product.getCategoryId());
         params.put("memberId", product.getMemberId());
@@ -77,7 +76,7 @@ public class ProductRepositoryAdapter implements ProductPersistencePort, Product
 
     @Override
     public Optional<ProductSpecificResponse> findSpecificProductById(final Long productId, final Long memberId) {
-        return productQueryRepository.findSpecificProductById(productId, memberId);
+        throw new UnsupportedOperationException("findSpecificProductById needs to be implemented with MyBatis");
     }
 
     @Override
@@ -87,17 +86,17 @@ public class ProductRepositoryAdapter implements ProductPersistencePort, Product
             final Long categoryId,
             final int pageSize
     ) {
-        return productQueryRepository.findAllWithPagingByCategoryId(memberId, productId, categoryId, pageSize);
+        throw new UnsupportedOperationException("findAllProductsInCategoryWithPaging needs to be implemented with MyBatis");
     }
 
     @Override
     public List<ProductPagingSimpleResponse> findLikesProducts(final Long memberId) {
-        return productQueryRepository.findLikesProducts(memberId);
+        throw new UnsupportedOperationException("findLikesProducts needs to be implemented with MyBatis");
     }
 
     @Override
     public List<ProductImageResponse> findImages(final Long productId) {
-        return productQueryRepository.findImages(productId);
+        throw new UnsupportedOperationException("findImages needs to be implemented with MyBatis");
     }
 
     @Override

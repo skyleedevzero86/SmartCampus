@@ -1,6 +1,7 @@
 package com.sleekydz86.server.market.board.domain;
 
 import com.sleekydz86.server.global.domain.BaseEntity;
+import com.sleekydz86.server.global.exception.exceptions.WriterNotEqualsException;
 import com.sleekydz86.server.market.board.domain.dto.BoardUpdateResult;
 import com.sleekydz86.server.market.community.domain.ImageConverter;
 import com.sleekydz86.server.market.community.domain.vo.LikeCount;
@@ -24,6 +25,7 @@ public class Board extends BaseEntity {
 
     private Long writerId;
 
+    @Builder.Default
     private List<Image> images = new ArrayList<>();
 
     private LikeCount likeCount;

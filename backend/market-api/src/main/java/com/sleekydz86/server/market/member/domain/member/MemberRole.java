@@ -1,5 +1,6 @@
 package com.sleekydz86.server.market.member.domain.member;
 
+import com.sleekydz86.server.global.exception.exceptions.member.RoleNotFoundException;
 import lombok.Getter;
 
 import java.util.Arrays;

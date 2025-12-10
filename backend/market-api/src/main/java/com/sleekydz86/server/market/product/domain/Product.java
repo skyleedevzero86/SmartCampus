@@ -1,6 +1,8 @@
 package com.sleekydz86.server.market.product.domain;
 
 import com.sleekydz86.server.global.domain.BaseEntity;
+import com.sleekydz86.server.global.exception.exceptions.market.ProductAlreadySoldOutException;
+import com.sleekydz86.server.global.exception.exceptions.market.ProductOwnerNotEqualsException;
 import com.sleekydz86.server.market.product.application.ProductImageConverter;
 import com.sleekydz86.server.market.product.application.dto.ProductUpdateResult;
 import com.sleekydz86.server.market.product.domain.vo.*;
@@ -37,6 +39,7 @@ public class Product extends BaseEntity {
 
     private Long memberId;
 
+    @Builder.Default
     private List<ProductImage> productImages = new ArrayList<>();
 
 

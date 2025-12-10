@@ -15,8 +15,5 @@ public interface MailStorageMapper {
     MailStorage findById(@Param("id") Long id);
     
     List<MailStorage> findAllByMailStatus(@Param("mailStatus") MailStatus mailStatus);
-    
-    @Deprecated
-    void save(MailStorage mailStorage);
 }
 

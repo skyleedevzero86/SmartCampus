@@ -1,5 +1,6 @@
 package com.sleekydz86.server.market.community.domain.vo;
 
+import com.sleekydz86.server.global.exception.exceptions.LikeCountNegativeNumberException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;

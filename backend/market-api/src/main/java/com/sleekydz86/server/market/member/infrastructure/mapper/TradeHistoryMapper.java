@@ -1,6 +1,7 @@
 package com.sleekydz86.server.market.member.infrastructure.mapper;
 
 import com.sleekydz86.server.market.member.domain.member.TradeHistory;
+import com.sleekydz86.server.market.member.domain.member.dto.TradeHistoryResponse;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -15,4 +16,8 @@ public interface TradeHistoryMapper {
     List<TradeHistory> findAllBySellerId(@Param("sellerId") Long sellerId);
 
     void executeTradeHistoryCUD(Map<String, Object> params);
+
+    List<TradeHistoryResponse> findTradeHistoriesByBuyerId(@Param("memberId") Long memberId);
+
+    List<TradeHistoryResponse> findTradeHistoriesBySellerId(@Param("memberId") Long memberId);
 }

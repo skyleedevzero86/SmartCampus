@@ -1,5 +1,6 @@
 package com.sleekydz86.server.market.member.infrastructure.auth;
 
+import com.sleekydz86.server.global.exception.exceptions.auth.*;
 import com.sleekydz86.server.market.member.domain.auth.TokenProvider;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;

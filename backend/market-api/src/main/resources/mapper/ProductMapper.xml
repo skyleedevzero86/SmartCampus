@@ -25,6 +25,18 @@
         </association>
     </resultMap>
 
+    <resultMap id="ProductByMemberResponseMap" type="com.sleekydz86.server.market.member.domain.member.dto.ProductByMemberResponse">
+        <constructor>
+            <idArg column="product_id" javaType="java.lang.Long"/>
+            <arg column="seller_id" javaType="java.lang.Long"/>
+            <arg column="title" javaType="java.lang.String"/>
+            <arg column="price" javaType="java.lang.Integer"/>
+            <arg column="location" javaType="com.sleekydz86.server.market.product.domain.vo.Location"/>
+            <arg column="product_status" javaType="com.sleekydz86.server.market.product.domain.vo.ProductStatus" typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
+            <arg column="create_time" javaType="java.time.LocalDateTime"/>
+        </constructor>
+    </resultMap>
+
     <select id="findById" resultMap="ProductResultMap">
         SELECT id, title, content, location, price, view_count, like_count, product_status, category_id, member_id, created_at, updated_at
         FROM product
@@ -43,6 +55,19 @@
         SELECT id, title, content, location, price, view_count, like_count, product_status, category_id, member_id, created_at, updated_at
         FROM product
         WHERE category_id = #{categoryId}
+    </select>
+
+    <select id="findProductsByMemberId" resultMap="ProductByMemberResponseMap">
+        SELECT 
+            id AS product_id,
+            member_id AS seller_id,
+            title,
+            price,
+            location,
+            product_status,
+            created_at AS create_time
+        FROM product
+        WHERE member_id = #{memberId}
     </select>
 
     <select id="executeProductCUD" statementType="CALLABLE" parameterType="map">

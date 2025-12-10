@@ -1,5 +1,8 @@
 package com.sleekydz86.server.market.coupon.application;
 
+import com.sleekydz86.server.global.exception.exceptions.coupon.CouponNotFoundException;
+import com.sleekydz86.server.global.exception.exceptions.coupon.MemberCouponSizeNotEqualsException;
+import com.sleekydz86.server.global.exception.exceptions.member.MemberAuthInvalidException;
 import com.sleekydz86.server.market.coupon.application.dto.CouponCreateRequest;
 import com.sleekydz86.server.market.coupon.application.dto.MemberCouponCreateRequest;
 import com.sleekydz86.server.market.coupon.domain.*;
@@ -56,7 +59,7 @@ public class CouponService {
 
     private void validateAuthentication(final Long memberId, final Long authId) {
         if (!memberId.equals(authId)) {
-            throw new AuthenticationInvalidException();
+            throw new MemberAuthInvalidException();
         }
     }
 

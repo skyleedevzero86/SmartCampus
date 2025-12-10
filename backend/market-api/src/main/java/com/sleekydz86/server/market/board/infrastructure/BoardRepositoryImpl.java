@@ -29,7 +29,7 @@ public class BoardRepositoryImpl implements BoardRepository {
         params.put("title", board.getPost().getTitle());
         params.put("content", board.getPost().getContent());
         params.put("writerId", board.getWriterId());
-        params.put("likeCount", board.getLikeCount().getValue());
+        params.put("likeCount", board.getLikeCount().getLikeCount());
         params.put("resultMessage", null);
         params.put("affectedRows", null);
         boardMapper.executeBoardCUD(params);
