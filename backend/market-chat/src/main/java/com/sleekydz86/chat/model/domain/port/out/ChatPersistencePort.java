@@ -1,4 +1,4 @@
-package com.sleekydz86.chat.model.domain.port;
+package com.sleekydz86.chat.model.domain.port.out;
 
 import com.sleekydz86.chat.model.domain.Chat;
 
