@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.server.chat.infrastructure.chat.mapper.ChattingRoomMapper">
+
+    <resultMap id="ChattingRoomResultMap" type="com.server.chat.domain.chat.ChattingRoom">
+        <id property="id" column="id"/>
+        <result property="productId" column="product_id"/>
+        <result property="buyerId" column="buyer_id"/>
+        <result property="sellerId" column="seller_id"/>
+        <result property="chattingStatus" column="chatting_status" typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <resultMap id="ChattingRoomSimpleResultMap" type="com.server.chat.domain.chat.dto.ChattingRoomSimpleResponse">
+        <result property="productName" column="product_name"/>
+        <result property="productId" column="product_id"/>
+        <result property="chattingRoomId" column="chatting_room_id"/>
+        <result property="sellerId" column="seller_id"/>
+        <result property="sellerNickname" column="seller_nickname"/>
+        <result property="lastChattingTime" column="last_chatting_time"/>
+    </resultMap>
+
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO chatting_room (product_id, buyer_id, seller_id, chatting_status, created_at, updated_at)
+        VALUES (#{productId}, #{buyerId}, #{sellerId}, #{chattingStatus}, NOW(), NOW())
+    </insert>
+
+    <select id="findById" resultMap="ChattingRoomResultMap">
+        SELECT id, product_id, buyer_id, seller_id, chatting_status, created_at, updated_at
+        FROM chatting_room
+        WHERE id = #{id}
+    </select>
+
+    <select id="findBySellerIdAndBuyerIdAndProductId" resultMap="ChattingRoomResultMap">
+        SELECT id, product_id, buyer_id, seller_id, chatting_status, created_at, updated_at
+        FROM chatting_room
+        WHERE seller_id = #{sellerId} AND buyer_id = #{buyerId} AND product_id = #{productId}
+    </select>
+
+    <select id="findAllByProductId" resultMap="ChattingRoomResultMap">
+        SELECT id, product_id, buyer_id, seller_id, chatting_status, created_at, updated_at
+        FROM chatting_room
+        WHERE product_id = #{productId}
+    </select>
+
+    <select id="findMyChattingRooms" resultMap="ChattingRoomSimpleResultMap">
+        SELECT
+            p.title as product_name,
+            p.id as product_id,
+            cr.id as chatting_room_id,
+            cr.seller_id,
+            m.nickname as seller_nickname,
+            cr.created_at as last_chatting_time
+        FROM chatting_room cr
+                 JOIN product p ON cr.product_id = p.id
+                 JOIN member m ON cr.seller_id = m.id
+        WHERE cr.buyer_id = #{authId} OR cr.seller_id = #{authId}
+        ORDER BY cr.created_at DESC
+    </select>
+
+</mapper>
