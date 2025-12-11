@@ -1,0 +1,22 @@
+# MVP 폴더
+mvp/
+
+# Gradle
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# IDE
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
