@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.server.chat.infrastructure.chat.mapper.ChatMapper">
+
+    <resultMap id="ChatResultMap" type="com.server.chat.domain.chat.Chat">
+        <id property="id" column="id"/>
+        <result property="senderId" column="sender_id"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <association property="chatRoomId" javaType="com.server.chat.domain.chat.vo.ChatRoomId">
+            <result property="value" column="chat_room_id"/>
+        </association>
+        <association property="message" javaType="com.server.chat.domain.chat.vo.Message">
+            <result property="value" column="message"/>
+        </association>
+    </resultMap>
+
+    <resultMap id="ChatHistoryResultMap" type="com.server.chat.domain.chat.dto.ChatHistoryResponse">
+        <result property="chatRoomId" column="chat_room_id"/>
+        <result property="chattingId" column="chatting_id"/>
+        <result property="senderId" column="sender_id"/>
+        <result property="senderNickname" column="sender_nickname"/>
+        <result property="message" column="message"/>
+        <result property="isSendByMe" column="is_send_by_me"/>
+        <result property="sendTime" column="send_time"/>
+    </resultMap>
+
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO chat (chat_room_id, sender_id, message, created_at, updated_at)
+        VALUES (#{chatRoomId.value}, #{senderId}, #{message.value}, NOW(), NOW())
+    </insert>
+
+    <select id="findChattingHistoryByChatId" resultMap="ChatHistoryResultMap">
+        SELECT
+        c.chat_room_id,
+        c.id as chatting_id,
+        c.sender_id,
+        m.nickname as sender_nickname,
+        c.message,
+        CASE WHEN c.sender_id = #{authId} THEN true ELSE false END as is_send_by_me,
+        c.created_at as send_time
+        FROM chat c
+        LEFT JOIN member m ON m.id = c.sender_id
+        WHERE c.chat_room_id = #{chattingRoomId}
+        <if test="chatId != null">
+            AND c.id &lt; #{chatId}
+        </if>
+        ORDER BY c.created_at DESC
+        LIMIT #{pageSize}
+    </select>
+
+</mapper>
