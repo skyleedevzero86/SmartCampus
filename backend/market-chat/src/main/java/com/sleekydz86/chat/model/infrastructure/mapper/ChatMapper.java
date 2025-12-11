@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface ChatMapper {
@@ -18,4 +19,6 @@ public interface ChatMapper {
             @Param("chatId") Long chatId,
             @Param("pageSize") Integer pageSize
     );
+
+    void executeChatCUD(Map<String, Object> params);
 }

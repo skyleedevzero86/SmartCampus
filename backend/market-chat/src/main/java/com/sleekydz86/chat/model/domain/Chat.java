@@ -25,10 +25,6 @@ public class Chat extends BaseEntity {
 
     private Message message;
 
-    /**
-     * 팩토리 메서드: 채팅 메시지 생성
-     * DDD 원칙에 따라 도메인 객체 생성 로직을 캡슐화합니다.
-     */
     public static Chat create(
             final Long chatRoomId,
             final Long senderId,
@@ -48,7 +44,6 @@ public class Chat extends BaseEntity {
         }
     }
 
-    // JPA를 위한 접근자 메서드
     public Long getChatRoomIdValue() {
         return chatRoomId.getValue();
     }

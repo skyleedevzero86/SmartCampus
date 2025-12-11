@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.server.chat.infrastructure.chat.mapper.ChatMapper">
+<mapper namespace="com.sleekydz86.chat.model.infrastructure.mapper.ChatMapper">
 
-    <resultMap id="ChatResultMap" type="com.server.chat.domain.chat.Chat">
+    <resultMap id="ChatResultMap" type="com.sleekydz86.chat.model.domain.Chat">
         <id property="id" column="id"/>
         <result property="senderId" column="sender_id"/>
         <result property="createdAt" column="created_at"/>
         <result property="updatedAt" column="updated_at"/>
-        <association property="chatRoomId" javaType="com.server.chat.domain.chat.vo.ChatRoomId">
+        <association property="chatRoomId" javaType="com.sleekydz86.chat.model.domain.vo.ChatRoomId">
             <result property="value" column="chat_room_id"/>
         </association>
-        <association property="message" javaType="com.server.chat.domain.chat.vo.Message">
+        <association property="message" javaType="com.sleekydz86.chat.model.domain.vo.Message">
             <result property="value" column="message"/>
         </association>
     </resultMap>
 
-    <resultMap id="ChatHistoryResultMap" type="com.server.chat.domain.chat.dto.ChatHistoryResponse">
+    <resultMap id="ChatHistoryResultMap" type="com.sleekydz86.chat.model.domain.dto.ChatHistoryResponse">
         <result property="chatRoomId" column="chat_room_id"/>
         <result property="chattingId" column="chatting_id"/>
         <result property="senderId" column="sender_id"/>
@@ -25,27 +25,34 @@
         <result property="sendTime" column="send_time"/>
     </resultMap>
 
-    <insert id="save" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO chat (chat_room_id, sender_id, message, created_at, updated_at)
-        VALUES (#{chatRoomId.value}, #{senderId}, #{message.value}, NOW(), NOW())
-    </insert>
+    <select id="executeChatCUD" statementType="CALLABLE" parameterType="map">
+        {CALL sp_chat_cud(
+            #{operation, mode=IN, jdbcType=CHAR},
+            #{id, mode=IN, jdbcType=BIGINT},
+            #{chatRoomId, mode=IN, jdbcType=BIGINT},
+            #{senderId, mode=IN, jdbcType=BIGINT},
+            #{message, mode=IN, jdbcType=LONGVARCHAR},
+            #{resultMessage, mode=OUT, jdbcType=VARCHAR},
+            #{affectedRows, mode=OUT, jdbcType=INTEGER},
+            #{generatedId, mode=OUT, jdbcType=BIGINT}
+        )}
+    </select>
 
     <select id="findChattingHistoryByChatId" resultMap="ChatHistoryResultMap">
         SELECT
-        c.chat_room_id,
-        c.id as chatting_id,
-        c.sender_id,
-        m.nickname as sender_nickname,
-        c.message,
-        CASE WHEN c.sender_id = #{authId} THEN true ELSE false END as is_send_by_me,
-        c.created_at as send_time
-        FROM chat c
-        LEFT JOIN member m ON m.id = c.sender_id
-        WHERE c.chat_room_id = #{chattingRoomId}
+            v.chat_room_id,
+            v.chatting_id,
+            v.sender_id,
+            v.sender_nickname,
+            v.message,
+            CASE WHEN v.sender_id = #{authId} THEN true ELSE false END as is_send_by_me,
+            v.send_time
+        FROM v_chat_history v
+        WHERE v.chat_room_id = #{chattingRoomId}
         <if test="chatId != null">
-            AND c.id &lt; #{chatId}
+            AND v.chatting_id &lt; #{chatId}
         </if>
-        ORDER BY c.created_at DESC
+        ORDER BY v.send_time DESC
         LIMIT #{pageSize}
     </select>
 

@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Mapper
@@ -24,4 +25,6 @@ public interface ChattingRoomMapper {
     List<ChattingRoom> findAllByProductId(@Param("productId") Long productId);
 
     List<ChattingRoomSimpleResponse> findMyChattingRooms(@Param("authId") Long authId);
+
+    void executeChattingRoomCUD(Map<String, Object> params);
 }
