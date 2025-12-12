@@ -12,3 +12,4 @@ public interface ProductImageUploadPort {
     void delete(final List<ProductImage> deletedImages);
 }
 
+

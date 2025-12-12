@@ -11,3 +11,4 @@ public class MailException extends RuntimeException {
     }
 }
 
+

@@ -11,3 +11,4 @@ public interface ProductLikePersistencePort {
     ProductLike saveProductLike(final ProductLike productLike);
 }
 
+
