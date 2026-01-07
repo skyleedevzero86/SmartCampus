@@ -38,27 +38,27 @@ subprojects {
     dependencies {
         implementation("org.springframework.boot:spring-boot-starter-web")
         implementation("org.springframework.boot:spring-boot-starter-validation")
+        implementation("org.springframework.boot:spring-boot-starter-actuator")
+        
         compileOnly("org.projectlombok:lombok")
-
+        annotationProcessor("org.projectlombok:lombok")
+        annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+        
         runtimeOnly("com.h2database:h2")
         runtimeOnly("com.mysql:mysql-connector-j")
         implementation("org.springframework.boot:spring-boot-starter-data-redis")
-
+        
         implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3")
-
+        
         implementation("org.flywaydb:flyway-core")
         implementation("org.flywaydb:flyway-mysql")
-
-        annotationProcessor("org.projectlombok:lombok")
-
+        
+        implementation("com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5")
+        
+        runtimeOnly("io.micrometer:micrometer-registry-prometheus")
+        
         testImplementation("org.springframework.boot:spring-boot-starter-test")
         testImplementation("io.rest-assured:rest-assured:5.3.0")
-        annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
-
-        implementation("com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5")
-
-        implementation("org.springframework.boot:spring-boot-starter-actuator")
-        runtimeOnly("io.micrometer:micrometer-registry-prometheus")
     }
 
     tasks.named<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
