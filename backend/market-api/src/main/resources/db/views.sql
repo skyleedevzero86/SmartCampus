@@ -62,3 +62,5 @@ SELECT
 FROM voucher v
 LEFT JOIN coupon c ON v.coupon_id = c.id;
 
+
+

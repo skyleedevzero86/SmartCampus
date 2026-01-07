@@ -9,6 +9,7 @@ import com.sleekydz86.server.market.product.application.dto.ProductWithImageResp
 import com.sleekydz86.server.market.product.application.dto.UsingCouponRequest;
 import com.sleekydz86.server.market.product.domain.dto.ProductPagingSimpleResponse;
 import com.sleekydz86.server.market.product.ui.support.ViewCountChecker;
+import com.sleekydz86.server.market.product.ai.ProductViewRecommendationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,7 @@ public class ProductController {
 
     private final ProductService productService;
     private final ProductQueryService productQueryService;
+    private final com.sleekydz86.server.market.product.ai.ProductViewRecommendationService productViewRecommendationService;
 
     @GetMapping("/{categoryId}/products")
     public ResponseEntity<List<ProductPagingSimpleResponse>> findAllProductsInCategory(
@@ -52,7 +54,23 @@ public class ProductController {
             @ViewCountChecker final Boolean canAddViewCount
     ) {
         productService.addViewCount(productId, canAddViewCount);
-        return ResponseEntity.ok(productQueryService.findById(productId, memberId));
+        ProductWithImageResponse response = productQueryService.findById(productId, memberId);
+        
+        List<ProductPagingSimpleResponse> similarProducts = 
+                productViewRecommendationService.recommendSimilarProducts(productId, memberId);
+        
+        return ResponseEntity.ok(response);
+    }
+    
+    @GetMapping("/{categoryId}/products/{productId}/similar")
+    public ResponseEntity<List<ProductPagingSimpleResponse>> getSimilarProducts(
+            @PathVariable("productId") final Long productId,
+            @PathVariable("categoryId") final Long categoryId,
+            @AuthMember final Long memberId
+    ) {
+        List<ProductPagingSimpleResponse> similarProducts = 
+                productViewRecommendationService.recommendSimilarProducts(productId, memberId);
+        return ResponseEntity.ok(similarProducts);
     }
 
     @PatchMapping("/{categoryId}/products/{productId}")

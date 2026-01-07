@@ -15,7 +15,6 @@ import javax.management.relation.RoleNotFoundException;
 @RestControllerAdvice
 public class MemberExceptionHandler {
 
-    // member
     @ExceptionHandler(RoleNotFoundException.class)
     public ResponseEntity<String> handleRoleNotFoundException(final RoleNotFoundException exception) {
         return getResponse(HttpStatus.NOT_FOUND, exception);
@@ -41,7 +40,6 @@ public class MemberExceptionHandler {
         return getResponse(HttpStatus.CONFLICT, exception);
     }
 
-    // auth
     @ExceptionHandler(SignatureInvalidException.class)
     public ResponseEntity<String> handleSignatureInvalidException(final SignatureInvalidException exception) {
         return getResponse(HttpStatus.UNAUTHORIZED, exception);
