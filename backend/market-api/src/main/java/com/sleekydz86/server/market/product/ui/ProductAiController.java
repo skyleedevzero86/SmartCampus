@@ -2,6 +2,7 @@ package com.sleekydz86.server.market.product.ui;
 
 import com.sleekydz86.server.market.member.ui.auth.support.AuthMember;
 import com.sleekydz86.server.market.product.ai.ProductAiService;
+import com.sleekydz86.server.market.product.ai.application.ProductAiAgentService;
 import com.sleekydz86.server.market.product.domain.dto.ProductPagingSimpleResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import java.util.List;
 public class ProductAiController {
 
     private final ProductAiService productAiService;
+    private final ProductAiAgentService productAiAgentService;
 
     @GetMapping("/recommendations")
     public ResponseEntity<List<ProductPagingSimpleResponse>> recommendProducts(
@@ -43,7 +45,7 @@ public class ProductAiController {
             @RequestParam(required = false) Long categoryId
     ) {
         List<ProductPagingSimpleResponse> results = 
-                productAiService.smartSearch(query, memberId, categoryId);
+                productAiAgentService.smartSearch(query, memberId, categoryId);
         return ResponseEntity.ok(results);
     }
 }

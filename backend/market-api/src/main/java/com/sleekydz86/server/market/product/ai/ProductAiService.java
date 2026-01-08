@@ -98,7 +98,11 @@ public class ProductAiService {
             return List.of();
         }
         
-        return List.of();
+        return productQueryPort.findAllProductsInCategoryWithPaging(null, null, categoryId, 20)
+                .stream()
+                .filter(p -> !likedProducts.stream().anyMatch(liked -> liked.id().equals(p.id())))
+                .limit(5)
+                .toList();
     }
 }
 
