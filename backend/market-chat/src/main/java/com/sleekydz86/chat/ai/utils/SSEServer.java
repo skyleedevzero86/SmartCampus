@@ -66,7 +66,7 @@ public class SSEServer {
         try {
             sseEmitter.send(msgEvent);
         } catch (IOException e) {
-            log.error("SSE send message error, userId: {}, error: {}", userId, e.getMessage());
+            log.error("SSE 메시지 전송 오류, 사용자ID: {}, 오류: {}", userId, e.getMessage());
             close(userId);
         }
     }

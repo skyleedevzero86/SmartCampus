@@ -65,16 +65,17 @@ public class ProductImageS3UploadAdapter implements ProductImageUploadPort {
         try {
             amazonS3Client.deleteObject(bucket, objectKey);
         } catch (AmazonS3Exception e) {
-            log.error("File delete fail : " + e.getMessage());
+            log.error("파일 삭제 실패: " + e.getMessage());
             throw new FileUploadFailureException(e.getCause());
         } catch (SdkClientException e) {
-            log.error("AWS SDK client error : " + e.getMessage());
+            log.error("AWS SDK 클라이언트 오류: " + e.getMessage());
             throw new FileUploadFailureException(e.getCause());
         }
 
-        log.info("File delete complete: " + objectKey);
+        log.info("파일 삭제 완료: " + objectKey);
     }
 }
+
 
 
 

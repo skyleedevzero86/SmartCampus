@@ -43,7 +43,7 @@ public class AiChatApplicationService {
                         error -> log.error("【사용자: {}】의 스트림 구독 최종 실패: {}", userId, error.getMessage()),
                         () -> {
                             log.info("【사용자: {}】의 스트림이 성공적으로 종료되었습니다.", userId);
-                            sseEventService.sendMessage(userId, "done", SSEMsgType.FINISH);
+                            sseEventService.sendMessage(userId, "완료", SSEMsgType.FINISH);
                             sseEventService.closeConnection(userId);
                         }
                 );
