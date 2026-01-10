@@ -2,6 +2,7 @@ package com.sleekydz86.server.market.coupon.ui;
 
 import com.sleekydz86.server.market.coupon.application.CouponService;
 import com.sleekydz86.server.market.coupon.application.dto.CouponCreateRequest;
+import com.sleekydz86.server.market.coupon.application.dto.CouponPurchaseRequest;
 import com.sleekydz86.server.market.coupon.application.dto.MemberCouponCreateRequest;
 import com.sleekydz86.server.market.coupon.domain.Coupons;
 import com.sleekydz86.server.market.coupon.ui.dto.ApplyCouponResponse;
@@ -60,5 +61,14 @@ public class CouponController {
     ) {
         int discountPrice = couponService.applyCoupons(price, couponIds);
         return ResponseEntity.ok(new ApplyCouponResponse(price, discountPrice, couponIds));
+    }
+
+    @PostMapping("/coupons/purchase")
+    public ResponseEntity<Void> purchaseCoupon(
+            @AuthMember final Long memberId,
+            @RequestBody final CouponPurchaseRequest request
+    ) {
+        couponService.purchaseCoupon(memberId, request.couponId());
+        return ResponseEntity.ok().build();
     }
 }

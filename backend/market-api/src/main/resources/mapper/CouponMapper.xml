@@ -4,6 +4,7 @@
 
     <resultMap id="CouponResultMap" type="com.sleekydz86.server.market.coupon.domain.Coupon">
         <id property="id" column="id"/>
+        <result property="price" column="price"/>
         <result property="createdAt" column="created_at"/>
         <result property="updatedAt" column="updated_at"/>
         <association property="description" javaType="com.sleekydz86.server.market.coupon.domain.Description">
@@ -18,13 +19,13 @@
     </resultMap>
 
     <select id="findById" resultMap="CouponResultMap">
-        SELECT id, name, content, can_use_alone, is_discount_percentage, amount, created_at, updated_at
+        SELECT id, name, content, can_use_alone, is_discount_percentage, amount, price, created_at, updated_at
         FROM coupon
         WHERE id = #{id}
     </select>
 
     <select id="findAllByIdIn" resultMap="CouponResultMap">
-        SELECT id, name, content, can_use_alone, is_discount_percentage, amount, created_at, updated_at
+        SELECT id, name, content, can_use_alone, is_discount_percentage, amount, price, created_at, updated_at
         FROM coupon
         WHERE id IN
         <foreach collection="ids" item="id" open="(" separator="," close=")">
@@ -50,6 +51,7 @@
             #{canUseAlone, mode=IN, jdbcType=BOOLEAN},
             #{isDiscountPercentage, mode=IN, jdbcType=BOOLEAN},
             #{amount, mode=IN, jdbcType=INTEGER},
+            #{price, mode=IN, jdbcType=INTEGER},
             #{resultMessage, mode=OUT, jdbcType=VARCHAR},
             #{affectedRows, mode=OUT, jdbcType=INTEGER}
         )}

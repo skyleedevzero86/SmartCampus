@@ -5,6 +5,7 @@ import com.sleekydz86.server.market.voucher.application.VoucherQueryService;
 import com.sleekydz86.server.market.voucher.application.VoucherService;
 import com.sleekydz86.server.market.voucher.application.dto.VoucherCreateRequest;
 import com.sleekydz86.server.market.voucher.application.dto.VoucherNumberRequest;
+import com.sleekydz86.server.market.voucher.application.dto.VoucherPurchaseRequest;
 import com.sleekydz86.server.market.voucher.domain.Voucher;
 import com.sleekydz86.server.market.voucher.domain.dto.VoucherPageResponse;
 import com.sleekydz86.server.market.voucher.domain.dto.VoucherSimpleResponse;
@@ -60,5 +61,15 @@ public class VoucherController {
     @GetMapping("/vouchers/{voucherId}")
     public ResponseEntity<VoucherSpecificResponse> findSpecificVoucherById(@PathVariable final Long voucherId) {
         return ResponseEntity.ok(voucherQueryService.findSpecificVoucher(voucherId));
+    }
+
+    @PostMapping("/vouchers/purchase")
+    public ResponseEntity<Long> purchaseVoucher(
+            @AuthMember final Long memberId,
+            @RequestBody final VoucherPurchaseRequest request
+    ) {
+        Voucher voucher = voucherService.purchaseVoucher(memberId, request.couponId(), request.description());
+        return ResponseEntity.created(URI.create("/api/vouchers/" + voucher.getId()))
+                .build();
     }
 }

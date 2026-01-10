@@ -18,28 +18,28 @@ SmartCampus는 Spring Boot 기반의 마이크로서비스 아키텍처로 구�
 
 ### Backend
 
-| 기술 | 버전/설명 |
-|------|----------|
-| **Language** | Java 21 |
-| **Framework** | Spring Boot 4.0.0 |
-| **Architecture** | Hexagonal Architecture, MSA |
-| **Database** | MySQL, Redis |
-| **ORM** | JPA, MyBatis |
-| **AI** | Spring AI 1.0.0, GLM-4.7 |
-| **Security** | JWT, Jasypt |
-| **Cloud** | AWS S3 |
-| **Documentation** | Spring REST Docs |
-| **Build Tool** | Gradle (Kotlin DSL) |
+| 기술              | 버전/설명                      |
+| ----------------- | ------------------------------ |
+| **Language**      | Java 21                        |
+| **Framework**     | Spring Boot 4.0.0              |
+| **Architecture**  | Hexagonal Architecture, MSA    |
+| **Database**      | MySQL, Redis                   |
+| **ORM**           | JPA, MyBatis                   |
+| **AI**            | Spring AI 1.0.0, GLM-4.7       |
+| **Security**      | JWT, Jasypt (민감 정보 암호화) |
+| **Storage**       | MinIO (로컬), AWS S3 (운영)    |
+| **Documentation** | Spring REST Docs               |
+| **Build Tool**    | Gradle (Kotlin DSL)            |
 
 ### Frontend
 
-| 기술 | 버전 |
-|------|------|
-| **Framework** | Next.js 16.0.10 |
-| **Language** | TypeScript 5 |
-| **UI Library** | React 19.2.1 |
-| **Styling** | Tailwind CSS 4 |
-| **Package Manager** | pnpm 9.10.0 |
+| 기술                | 버전            |
+| ------------------- | --------------- |
+| **Framework**       | Next.js 16.0.10 |
+| **Language**        | TypeScript 5    |
+| **UI Library**      | React 19.2.1    |
+| **Styling**         | Tailwind CSS 4  |
+| **Package Manager** | pnpm 9.10.0     |
 
 ### Infrastructure
 
@@ -79,14 +79,18 @@ SmartCampus는 Spring Boot 기반의 마이크로서비스 아키텍처로 구�
 ### 모듈별 역할
 
 #### 1. **market-api** (메인 API 서버)
+
 - 상품 관리 (CRUD)
 - 회원 인증/인가 (JWT)
 - 게시판/댓글 시스템
 - 쿠폰/바우처 관리
 - AI 기반 상품 추천 및 설명 생성
-- AWS S3 파일 업로드
+- 파일 업로드 (MinIO/S3)
+  - 로컬 환경: MinIO 사용
+  - 운영 환경: AWS S3 사용
 
 #### 2. **market-chat** (AI 채팅 서버)
+
 - 실시간 AI 채팅 (SSE)
 - RAG(Retrieval-Augmented Generation) 지원
 - 인터넷 검색 연동
@@ -94,6 +98,7 @@ SmartCampus는 Spring Boot 기반의 마이크로서비스 아키텍처로 구�
 - MCP(Model Context Protocol) 클라이언트
 
 #### 3. **market-batch** (배치 서버)
+
 - 스케줄 작업 관리
 - 메일 발송 (재발송, 삭제)
 - 이벤트 기반 비동기 처리
@@ -163,7 +168,7 @@ SmartCampus/
 - 게시판 CRUD
 - 댓글 시스템
 - 좋아요 기능
-- 이미지 업로드 (AWS S3)
+- 이미지 업로드 (MinIO/S3)
 
 ### 5. 배치 작업
 
@@ -196,6 +201,50 @@ SEARCH_ENGINE_COUNTS=25
 
 각 모듈의 `application-dev.yml` 또는 `application-prod.yml`에서 데이터베이스 설정을 확인하세요.
 
+### 파일 스토리지 설정
+
+#### 로컬 환경 (MinIO)
+
+로컬 개발 환경에서는 MinIO를 사용합니다. MinIO를 실행하려면:
+
+```bash
+docker run -p 9000:9000 -p 9001:9001 \
+  -e "MINIO_ROOT_USER=minioadmin" \
+  -e "MINIO_ROOT_PASSWORD=minioadmin" \
+  minio/minio server /data --console-address ":9001"
+```
+
+기본 설정:
+
+- Endpoint: `http://localhost:9000`
+- Access Key: `minioadmin`
+- Secret Key: `minioadmin`
+- Console: `http://localhost:9001`
+
+#### 운영 환경 (AWS S3)
+
+운영 환경에서는 AWS S3를 사용합니다. `application-prod.yml`에서 S3 설정을 확인하세요.
+
+### 민감 정보 암호화
+
+모든 민감 정보는 Jasypt를 사용하여 암호화됩니다:
+
+- 데이터베이스 연결 정보 (URL, 사용자명, 비밀번호)
+- Redis 호스트 정보
+- MinIO/S3 인증 정보 (Access Key, Secret Key, Endpoint)
+- 기타 민감한 설정값
+
+암호화된 값을 생성하려면:
+
+```bash
+# JasyptUtilTest 실행
+cd backend/market-api
+./gradlew test --tests JasyptUtilTest
+
+# 콘솔에 출력된 암호화된 값을 application.yml에 적용
+# 예: username: ENC(암호화된값)
+```
+
 ## 🏃 실행 방법
 
 ### Backend
@@ -225,6 +274,7 @@ pnpm dev
 ## 📊 API 엔드포인트
 
 ### 상품 API
+
 - `GET /api/categories/{categoryId}/products` - 카테고리별 상품 조회
 - `POST /api/categories/{categoryId}/products` - 상품 등록
 - `GET /api/categories/{categoryId}/products/{productId}` - 상품 상세 조회
@@ -233,11 +283,13 @@ pnpm dev
 - `GET /api/ai/products/smart-search` - 스마트 검색
 
 ### AI 채팅 API
+
 - `GET /api/ai/sse/connect` - SSE 연결
 - `POST /api/ai/chat/send` - 채팅 메시지 전송
 - `POST /api/ai/rag/upload` - 문서 업로드 (RAG)
 
 ### 인증 API
+
 - `POST /api/auth/login` - 로그인
 - `POST /api/auth/signup` - 회원가입
 - `POST /api/auth/refresh` - 토큰 갱신
@@ -308,7 +360,13 @@ public SseEmitter connect(@RequestParam String userId) {
 ## 🔒 보안
 
 - **JWT 인증**: 토큰 기반 인증
-- **Jasypt**: 민감 정보 암호화
+- **Jasypt 암호화**:
+  - 모든 민감 정보를 ENC() 형식으로 암호화
+  - 각 모듈별 JasyptUtil 유틸리티 클래스 제공
+  - JasyptUtilTest를 통한 암호화/복호화 테스트 지원
+- **환경별 스토리지 분리**:
+  - 로컬: MinIO (개발 환경)
+  - 운영: AWS S3 (프로덕션 환경)
 - **CORS 설정**: Cross-Origin 요청 제어
 - **SQL Injection 방지**: PreparedStatement 사용
 
@@ -316,33 +374,7 @@ public SseEmitter connect(@RequestParam String userId) {
 
 - **Spring REST Docs**: API 문서 자동 생성
 - **프로파일별 설정**: dev/prod 환경 분리
-
-## 🧪 테스트
-
-```bash
-# API 테스트 및 문서 생성
-./gradlew test asciidoctor
-```
-
-## 📦 배포
-
-### 프로파일 선택
-
-- **개발 환경**: `--spring.profiles.active=dev`
-- **운영 환경**: `--spring.profiles.active=prod`
-
-### 포트 구성
-
-| 서비스 | 서버 포트 | Management 포트 |
-|--------|----------|----------------|
-| market-api | 8080 | 9000 |
-| market-batch | 8081 | 9001 |
-| market-chat | 8082 | 9002 |
-| frontend | 7082 | - |
-
-## 🤝 기여
-
-이 프로젝트는 포트폴리오 목적으로 개발되었습니다.
+- **한국어 로그**: 모든 로그 및 에러 메시지 한국어화
 
 ## 📄 라이선스
 
@@ -351,5 +383,6 @@ public SseEmitter connect(@RequestParam String userId) {
 ---
 
 **개발 기간**: 2025년  
-**주요 기술**: Spring Boot, Spring AI, Next.js, MySQL, Redis  
-**아키텍처**: MSA, Hexagonal Architecture
+**주요 기술**: Spring Boot, Spring AI, Next.js, MySQL, Redis, MinIO, AWS S3  
+**아키텍처**: MSA, Hexagonal Architecture  
+**보안**: Jasypt 암호화, JWT 인증, 환경별 스토리지 분리

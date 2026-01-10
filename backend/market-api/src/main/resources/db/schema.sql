@@ -135,6 +135,7 @@ CREATE TABLE IF NOT EXISTS coupon (
     can_use_alone BOOLEAN NOT NULL DEFAULT FALSE COMMENT '단독 사용 가능 여부',
     is_discount_percentage BOOLEAN NOT NULL DEFAULT FALSE COMMENT '할인율 여부 (TRUE:할인율, FALSE:할인금액)',
     amount INT NOT NULL DEFAULT 0 COMMENT '할인 금액 또는 할인율',
+    price INT NOT NULL DEFAULT 0 COMMENT '쿠폰 구매 가격',
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성 일시',
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '수정 일시',
     INDEX idx_coupon_name (name)
@@ -189,3 +190,21 @@ CREATE TABLE IF NOT EXISTS trade_history (
     FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='거래 내역 테이블';
 
+-- 결제 이력 테이블
+CREATE TABLE IF NOT EXISTS purchase_history (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '결제 이력 고유 식별자',
+    member_id BIGINT NOT NULL COMMENT '구매자 회원 식별자',
+    purchase_type VARCHAR(20) NOT NULL COMMENT '구매 유형 (COUPON:쿠폰, VOUCHER:바우처)',
+    coupon_id BIGINT COMMENT '쿠폰 식별자 (쿠폰 구매 시)',
+    voucher_id BIGINT COMMENT '바우처 식별자 (바우처 구매 시)',
+    price INT NOT NULL DEFAULT 0 COMMENT '결제 금액',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성 일시',
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '수정 일시',
+    INDEX idx_purchase_history_member_id (member_id),
+    INDEX idx_purchase_history_coupon_id (coupon_id),
+    INDEX idx_purchase_history_voucher_id (voucher_id),
+    INDEX idx_purchase_history_created_at (created_at),
+    FOREIGN KEY (member_id) REFERENCES member(id) ON DELETE RESTRICT,
+    FOREIGN KEY (coupon_id) REFERENCES coupon(id) ON DELETE RESTRICT,
+    FOREIGN KEY (voucher_id) REFERENCES voucher(id) ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='결제 이력 테이블';

@@ -322,6 +322,7 @@ CREATE PROCEDURE sp_coupon_cud(
     IN p_can_use_alone BOOLEAN,
     IN p_is_discount_percentage BOOLEAN,
     IN p_amount INT,
+    IN p_price INT,
     OUT p_result_message VARCHAR(255),
     OUT p_affected_rows INT
 )
@@ -367,8 +368,8 @@ BEGIN
             SET p_result_message = '할인율은 1~100 사이여야 합니다.';
             ROLLBACK;
         ELSE
-            INSERT INTO coupon (name, content, can_use_alone, is_discount_percentage, amount, created_at, updated_at)
-            VALUES (p_name, p_content, IFNULL(p_can_use_alone, FALSE), IFNULL(p_is_discount_percentage, FALSE), p_amount, NOW(), NOW());
+            INSERT INTO coupon (name, content, can_use_alone, is_discount_percentage, amount, price, created_at, updated_at)
+            VALUES (p_name, p_content, IFNULL(p_can_use_alone, FALSE), IFNULL(p_is_discount_percentage, FALSE), p_amount, IFNULL(p_price, 0), NOW(), NOW());
             
             SET p_affected_rows = ROW_COUNT();
             SET p_result_message = CONCAT('쿠폰이 성공적으로 생성되었습니다. 생성된 ID: ', LAST_INSERT_ID());
@@ -1662,6 +1663,101 @@ BEGIN
         ELSE
             SET p_result_message = '삭제를 위해서는 ID 또는 board_id와 member_id가 필요합니다.';
             ROLLBACK;
+        END IF;
+    END IF;
+    
+END$$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE sp_purchase_history_cud(
+    IN p_operation CHAR(1),
+    IN p_id BIGINT,
+    IN p_member_id BIGINT,
+    IN p_purchase_type VARCHAR(20),
+    IN p_coupon_id BIGINT,
+    IN p_voucher_id BIGINT,
+    IN p_price INT,
+    OUT p_result_message VARCHAR(255),
+    OUT p_affected_rows INT
+)
+BEGIN
+    DECLARE v_count INT DEFAULT 0;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        GET DIAGNOSTICS CONDITION 1
+            @sqlstate = RETURNED_SQLSTATE,
+            @errno = MYSQL_ERRNO,
+            @text = MESSAGE_TEXT;
+        SET p_result_message = CONCAT('오류 발생: ', @text);
+        SET p_affected_rows = 0;
+    END;
+    
+    DECLARE EXIT HANDLER FOR SQLWARNING
+    BEGIN
+        ROLLBACK;
+        SET p_result_message = '경고가 발생했습니다.';
+        SET p_affected_rows = 0;
+    END;
+    
+    START TRANSACTION;
+    
+    SET p_affected_rows = 0;
+    SET p_result_message = '';
+    
+    IF p_operation NOT IN ('C', 'U', 'D') THEN
+        SET p_result_message = '잘못된 작업 코드입니다. C(생성), U(수정), D(삭제)만 사용 가능합니다.';
+        ROLLBACK;
+    ELSEIF p_operation = 'C' THEN
+        IF p_member_id IS NULL THEN
+            SET p_result_message = '회원 ID는 필수 입력 항목입니다.';
+            ROLLBACK;
+        ELSEIF p_purchase_type IS NULL OR TRIM(p_purchase_type) = '' THEN
+            SET p_result_message = '구매 유형은 필수 입력 항목입니다.';
+            ROLLBACK;
+        ELSEIF p_price IS NULL OR p_price < 0 THEN
+            SET p_result_message = '결제 금액은 0 이상이어야 합니다.';
+            ROLLBACK;
+        ELSEIF p_purchase_type = 'COUPON' AND p_coupon_id IS NULL THEN
+            SET p_result_message = '쿠폰 구매 시 쿠폰 ID는 필수입니다.';
+            ROLLBACK;
+        ELSEIF p_purchase_type = 'VOUCHER' AND p_voucher_id IS NULL THEN
+            SET p_result_message = '바우처 구매 시 바우처 ID는 필수입니다.';
+            ROLLBACK;
+        ELSE
+            SELECT COUNT(*) INTO v_count FROM member WHERE id = p_member_id;
+            IF v_count = 0 THEN
+                SET p_result_message = '존재하지 않는 회원 ID입니다.';
+                ROLLBACK;
+            ELSE
+                INSERT INTO purchase_history (member_id, purchase_type, coupon_id, voucher_id, price, created_at, updated_at)
+                VALUES (p_member_id, p_purchase_type, p_coupon_id, p_voucher_id, p_price, NOW(), NOW());
+                
+                SET p_affected_rows = ROW_COUNT();
+                SET p_result_message = CONCAT('결제 이력이 성공적으로 생성되었습니다. 생성된 ID: ', LAST_INSERT_ID());
+                COMMIT;
+            END IF;
+        END IF;
+    ELSEIF p_operation = 'D' THEN
+        IF p_id IS NULL THEN
+            SET p_result_message = '삭제할 결제 이력 ID는 필수 입력 항목입니다.';
+            ROLLBACK;
+        ELSE
+            SELECT COUNT(*) INTO v_count FROM purchase_history WHERE id = p_id FOR UPDATE;
+            
+            IF v_count = 0 THEN
+                SET p_result_message = '삭제할 결제 이력이 존재하지 않습니다.';
+                ROLLBACK;
+            ELSE
+                DELETE FROM purchase_history WHERE id = p_id;
+                
+                SET p_affected_rows = ROW_COUNT();
+                SET p_result_message = CONCAT('결제 이력이 성공적으로 삭제되었습니다. 삭제된 행 수: ', p_affected_rows);
+                COMMIT;
+            END IF;
         END IF;
     END IF;
     

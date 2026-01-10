@@ -25,17 +25,21 @@ public class Coupon extends BaseEntity {
 
     public Policy policy;
 
+    private Integer price;
+
     public static Coupon createCoupon(
             final String name,
             final String content,
             final boolean canUseAlone,
             final boolean isDiscountPercentage,
-            final int amount
+            final int amount,
+            final int price
     ) {
         validateAmountRange(isDiscountPercentage, amount);
         return Coupon.builder()
                 .description(new Description(name, content))
                 .policy(new Policy(canUseAlone, isDiscountPercentage, amount))
+                .price(price)
                 .build();
     }
 

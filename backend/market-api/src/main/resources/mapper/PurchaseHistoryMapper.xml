@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sleekydz86.server.market.purchase.infrastructure.mapper.PurchaseHistoryMapper">
+
+    <select id="executePurchaseHistoryCUD" statementType="CALLABLE" parameterType="map">
+        {CALL sp_purchase_history_cud(
+            #{operation, mode=IN, jdbcType=CHAR},
+            #{id, mode=IN, jdbcType=BIGINT},
+            #{memberId, mode=IN, jdbcType=BIGINT},
+            #{purchaseType, mode=IN, jdbcType=VARCHAR},
+            #{couponId, mode=IN, jdbcType=BIGINT},
+            #{voucherId, mode=IN, jdbcType=BIGINT},
+            #{price, mode=IN, jdbcType=INTEGER},
+            #{resultMessage, mode=OUT, jdbcType=VARCHAR},
+            #{affectedRows, mode=OUT, jdbcType=INTEGER}
+        )}
+    </select>
+
+</mapper>

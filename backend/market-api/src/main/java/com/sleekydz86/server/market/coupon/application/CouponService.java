@@ -3,9 +3,11 @@ package com.sleekydz86.server.market.coupon.application;
 import com.sleekydz86.server.global.exception.exceptions.coupon.CouponNotFoundException;
 import com.sleekydz86.server.global.exception.exceptions.coupon.MemberCouponSizeNotEqualsException;
 import com.sleekydz86.server.global.exception.exceptions.member.MemberAuthInvalidException;
+import com.sleekydz86.server.global.event.Events;
 import com.sleekydz86.server.market.coupon.application.dto.CouponCreateRequest;
 import com.sleekydz86.server.market.coupon.application.dto.MemberCouponCreateRequest;
 import com.sleekydz86.server.market.coupon.domain.*;
+import com.sleekydz86.server.market.coupon.domain.event.CouponPurchasedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,9 +24,20 @@ public class CouponService {
 
     @Transactional
     public Long saveNewCoupon(final CouponCreateRequest request) {
-        Coupon coupon = Coupon.createCoupon(request.name(), request.content(), request.canUseAlone(), request.isDiscountPercentage(), request.amount());
+        Coupon coupon = Coupon.createCoupon(request.name(), request.content(), request.canUseAlone(), request.isDiscountPercentage(), request.amount(), request.price());
         return couponRepository.save(coupon)
                 .getId();
+    }
+
+    @Transactional
+    public void purchaseCoupon(final Long memberId, final Long couponId) {
+        Coupon coupon = couponRepository.findById(couponId)
+                .orElseThrow(CouponNotFoundException::new);
+        
+        MemberCouponCreateRequest request = new MemberCouponCreateRequest(List.of(couponId));
+        saveMemberCoupons(memberId, request);
+        
+        Events.raise(new CouponPurchasedEvent(memberId, couponId, coupon.getPrice()));
     }
 
     @Transactional

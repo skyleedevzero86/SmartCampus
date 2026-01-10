@@ -17,6 +17,9 @@ public record CouponCreateRequest(
         Boolean isDiscountPercentage,
 
         @NotNull(message = "쿠폰 할인 값을 입력해주세요")
-        Integer amount
+        Integer amount,
+
+        @NotNull(message = "쿠폰 구매 가격을 입력해주세요")
+        Integer price
 ) {
 }

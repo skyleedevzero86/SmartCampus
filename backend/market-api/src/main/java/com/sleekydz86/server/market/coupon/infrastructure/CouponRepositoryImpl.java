@@ -27,6 +27,7 @@ public class CouponRepositoryImpl implements CouponRepository {
         params.put("canUseAlone", coupon.getPolicy().isCanUseAlone());
         params.put("isDiscountPercentage", coupon.getPolicy().isDiscountPercentage());
         params.put("amount", coupon.getPolicy().getAmount());
+        params.put("price", coupon.getPrice());
         params.put("resultMessage", null);
         params.put("affectedRows", null);
         couponMapper.executeCouponCUD(params);
@@ -48,6 +49,7 @@ public class CouponRepositoryImpl implements CouponRepository {
         params.put("canUseAlone", null);
         params.put("isDiscountPercentage", null);
         params.put("amount", null);
+        params.put("price", null);
         params.put("resultMessage", null);
         params.put("affectedRows", null);
         couponMapper.executeCouponCUD(params);
